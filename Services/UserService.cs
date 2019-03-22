@@ -1,5 +1,7 @@
 ﻿using Common;
+using DB;
 using Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Services.Interfaces;
@@ -9,28 +11,26 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Services
 {
     public class UserService : IUserService
     {
-        // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-        private List<User> _users = new List<User>
-        {
-            new User { Id = 1, FirstName = "Admin", LastName = "User", Username = "admin", Password = "admin", Role = Role.Admin },
-            new User { Id = 2, FirstName = "Normal", LastName = "User", Username = "user", Password = "user", Role = Role.User }
-        };
-
+        private IHttpContextAccessor _httpContextAccessor;
+        private readonly IRepository _repository;
         private readonly AppSettings _appSettings;
 
-        public UserService(IOptions<AppSettings> appSettings)
+        public UserService(IOptions<AppSettings> appSettings, IRepository repository, IHttpContextAccessor httpContextAccessor)
         {
             _appSettings = appSettings.Value;
+            _repository = repository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public User Authenticate(string username, string password)
         {
-            var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
+            var user = _repository.GetAll<User>().SingleOrDefault(x => x.Username == username && x.Password == password);
 
             // return null if user not found
             if (user == null)
@@ -48,7 +48,7 @@ namespace Services
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
                     new Claim(ClaimTypes.Role, user.Role)
                 }),
-                Expires = DateTime.Now.AddMinutes(2),
+                Expires = DateTime.Now.AddHours(2),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -60,25 +60,49 @@ namespace Services
             return user;
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<Bemerkung> GetAllBemerkungen()
         {
-            // return users without passwords
-            return _users.Select(x =>
-            {
-                x.Password = null;
-                return x;
-            });
+            return _repository.GetAll<Bemerkung>();
         }
 
-        public User GetById(int id)
+        public IEnumerable<User> GetAll()
         {
-            var user = _users.FirstOrDefault(x => x.Id == id);
+            var users = _repository.GetAll<User>();
 
-            // return user without password
+            foreach (var item in users)
+            {
+                item.Password = null;
+            }
+
+            return users;
+        }
+
+        public async Task<User> GetById(int id)
+        {
+            var user = await _repository.GetById<User>(id);
+
             if (user != null)
                 user.Password = null;
 
             return user;
+        }
+
+        public async Task Add()
+        {
+            User user = null;
+            var _uId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            if (!string.IsNullOrEmpty(_uId))
+            {
+                var uId = long.Parse(_uId);
+                user = await _repository.GetById<User>(uId);
+            }
+
+            await _repository.Create(new Bemerkung
+            {
+                Betreff = DateTime.Now.ToString(),
+                Text = "Test",
+                User = user
+            });
         }
     }
 }

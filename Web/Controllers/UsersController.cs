@@ -3,6 +3,7 @@ using Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
+using System.Threading.Tasks;
 
 namespace Web.Controllers
 {
@@ -32,10 +33,13 @@ namespace Web.Controllers
 
         [Authorize(Roles = Role.Admin)]
         [HttpPost("GetAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var users = _userService.GetAll();
-            return Ok(users);
+            await _userService.Add();
+
+
+            var values = _userService.GetAllBemerkungen();
+            return Ok(values);
         }
 
         [HttpGet("{id}")]

@@ -1,11 +1,15 @@
 ﻿using Common;
+using DB;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Services;
 using Services.Interfaces;
 using System.Text;
@@ -24,13 +28,34 @@ namespace Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
 
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
 
             var appSettings = appSettingsSection.Get<AppSettings>();
+
+
+
+
+
+            var connection = @"Server=(localdb)\mssqllocaldb;Database=rrCoderDb;Trusted_Connection=True;MultipleActiveResultSets=true";
+            services.AddDbContext<RRCoderDBContext>
+                (options => options.UseSqlServer(connection));
+
+            //(options => options.UseSqlServer(connection, builder => builder.MigrationsAssembly()));
+
+
+
+
+
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             services.AddAuthentication(x =>
             {
@@ -53,7 +78,10 @@ namespace Web
                 };
             });
 
+            services.AddHttpContextAccessor();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRepository, Repository>();
+
 
             services.AddSpaStaticFiles(configuration =>
             {
@@ -99,6 +127,17 @@ namespace Web
                     //spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                if (!serviceScope.ServiceProvider.GetService<RRCoderDBContext>().AllMigrationsApplied())
+                {
+                    serviceScope.ServiceProvider.GetService<RRCoderDBContext>().Database.Migrate();
+                }
+
+                serviceScope.ServiceProvider.GetService<RRCoderDBContext>().EnsureSeeded();
+            }
         }
     }
 }

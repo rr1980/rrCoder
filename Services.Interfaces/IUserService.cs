@@ -1,5 +1,6 @@
 ﻿using Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Services.Interfaces
 {
@@ -7,6 +8,8 @@ namespace Services.Interfaces
     {
         User Authenticate(string username, string password);
         IEnumerable<User> GetAll();
-        User GetById(int id);
+        IEnumerable<Bemerkung> GetAllBemerkungen();
+        Task<User> GetById(int id);
+        Task Add();
     }
 }

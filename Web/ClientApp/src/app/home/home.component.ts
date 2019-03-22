@@ -4,16 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
-interface User {
-  id?: number;
-  firstName: string;
-  lastName: string;
-  username: string;
-  password: string;
-  role: string;
-  token: string;
-}
-
 
 @Component({
   selector: 'app-home',
@@ -31,7 +21,7 @@ export class HomeComponent implements OnInit {
 
 
   onClickTest() {
-    this.ajax_post<User>("/api/Users/GetAll", null).subscribe((response) => {
+    this.ajax_post<any>("/api/Users/GetAll", null).subscribe((response) => {
 
       console.debug({ "Test": response });
 

@@ -1,0 +1,9 @@
+﻿[
+  {
+    "FirstName": "Max",
+    "LastName": "Mustermann",
+    "Username": "admin",
+    "Password": "admin",
+    "Role": "Admin"
+  }
+]
