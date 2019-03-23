@@ -28,9 +28,9 @@ namespace Services
             _httpContextAccessor = httpContextAccessor;
         }
 
-        public User Authenticate(string username, string password)
+        public Benutzer Authenticate(string username, string password)
         {
-            var user = _repository.GetAll<User>().SingleOrDefault(x => x.Username == username && x.Password == password);
+            var user = _repository.GetAll<Benutzer>().SingleOrDefault(x => x.Username == username && x.Password == password);
 
             // return null if user not found
             if (user == null)
@@ -65,9 +65,9 @@ namespace Services
             return _repository.GetAll<Bemerkung>();
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<Benutzer> GetAll()
         {
-            var users = _repository.GetAll<User>();
+            var users = _repository.GetAll<Benutzer>();
 
             foreach (var item in users)
             {
@@ -77,9 +77,9 @@ namespace Services
             return users;
         }
 
-        public async Task<User> GetById(int id)
+        public async Task<Benutzer> GetById(int id)
         {
-            var user = await _repository.GetById<User>(id);
+            var user = await _repository.GetById<Benutzer>(id);
 
             if (user != null)
                 user.Password = null;
@@ -89,20 +89,25 @@ namespace Services
 
         public async Task Add()
         {
-            User user = null;
+            Benutzer user = null;
             var _uId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
             if (!string.IsNullOrEmpty(_uId))
             {
                 var uId = long.Parse(_uId);
-                user = await _repository.GetById<User>(uId);
+                user = await _repository.GetById<Benutzer>(uId);
             }
 
-            await _repository.Create(new Bemerkung
+
+            var cc = _repository.GetAll<CodeContent>().FirstOrDefault();
+
+            cc.Bemerkungen.Add(new Bemerkung
             {
                 Betreff = DateTime.Now.ToString(),
                 Text = "Test",
                 User = user
             });
+
+            await _repository.Update(cc);
         }
     }
 }

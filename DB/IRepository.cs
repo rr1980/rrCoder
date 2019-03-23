@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace DB
 {
+
     public interface IRepository
     {
         Task<T> GetById<T>(long id) where T : BaseEntity;

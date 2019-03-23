@@ -39,11 +39,31 @@ namespace DB
         public static void EnsureSeeded(this RRCoderDBContext context)
         {
 
-            if (!context.Users.Any())
+            if (!context.Benutzer.Any())
             {
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "seed_users.json");
-                var users = JsonConvert.DeserializeObject<List<User>>(File.ReadAllText(path));
+                var users = JsonConvert.DeserializeObject<List<Benutzer>>(File.ReadAllText(path));
                 context.AddRange(users);
+                context.SaveChanges();
+            }
+
+            if (!context.CodeContents.Any())
+            {
+                var cc = new CodeContent
+                {
+                    Betreff = "C#",
+                    Text = "Test",
+                    User = context.Benutzer.FirstOrDefault()
+                };
+
+                cc.Bemerkungen.Add(new Bemerkung
+                {
+                    Betreff = "Information",
+                    Text = "Test",
+                    User = context.Benutzer.FirstOrDefault()
+                });
+
+                context.AddRange(cc);
                 context.SaveChanges();
             }
         }

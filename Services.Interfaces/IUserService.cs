@@ -6,10 +6,10 @@ namespace Services.Interfaces
 {
     public interface IUserService
     {
-        User Authenticate(string username, string password);
-        IEnumerable<User> GetAll();
+        Benutzer Authenticate(string username, string password);
+        IEnumerable<Benutzer> GetAll();
         IEnumerable<Bemerkung> GetAllBemerkungen();
-        Task<User> GetById(int id);
+        Task<Benutzer> GetById(int id);
         Task Add();
     }
 }

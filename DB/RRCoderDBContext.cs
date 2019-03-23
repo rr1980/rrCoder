@@ -1,7 +1,7 @@
-﻿using Entities;
+﻿using Common;
+using Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -11,7 +11,13 @@ namespace DB
     public partial class RRCoderDBContext : DbContext
     {
         private IHttpContextAccessor _httpContextAccessor;
-        public DbSet<User> Users { get; set; }
+
+        //public DbSet<BaseEntity> BaseEntity { get; set; }
+
+        public DbSet<Aenderungen> Aenderungen { get; set; }
+        public DbSet<Benutzer> Benutzer { get; set; }
+        public DbSet<Bemerkung> Bemerkungen { get; set; }
+        public DbSet<CodeContent> CodeContents { get; set; }
 
         public RRCoderDBContext(DbContextOptions<RRCoderDBContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
         {
@@ -23,18 +29,43 @@ namespace DB
 
             modelBuilder.HasDefaultSchema(schema: "rrCoder");
 
-            modelBuilder.Entity<ModifiedEntity>(entity =>
+            modelBuilder.Ignore<BaseEntity>();
+
+            modelBuilder.Entity<Aenderungen>(entity =>
             {
-                entity.HasOne(d => d.ModifiedUser)
-                    .WithMany(p => p.ModifiedEntity);
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.AusgefuehrteAenderungen);
+
+                entity.HasOne(d => d.CodeContent)
+                    .WithMany(p => p.Aenderungen);
+
+                entity.HasOne(d => d.Bemerkung)
+                    .WithMany(p => p.Aenderungen);
+            });
+
+            modelBuilder.Entity<CodeContent>(entity =>
+            {
+                entity.ToTable("CodeContent");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.CodeContent);
             });
 
             modelBuilder.Entity<Bemerkung>(entity =>
             {
+                entity.ToTable("Bemerkung");
+
                 entity.HasOne(d => d.User)
+                    .WithMany(p => p.Bemerkungen);
+
+                entity.HasOne(d => d.CodeContent)
                     .WithMany(p => p.Bemerkungen);
             });
 
+            modelBuilder.Entity<Benutzer>(entity =>
+            {
+                entity.ToTable("User");
+            });
 
             base.OnModelCreating(modelBuilder);
         }
@@ -53,31 +84,29 @@ namespace DB
 
         private void AddAuitInfo()
         {
-            User user = null;
-            var _uId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            Benutzer user = null;
+            var _uId = _httpContextAccessor?.HttpContext?.User?.FindFirst(ClaimTypes.Name).Value;
             if (!string.IsNullOrEmpty(_uId))
             {
                 var uId = long.Parse(_uId);
-                user = Users.FirstOrDefault(x => x.Id == uId);
+                user = Benutzer.FirstOrDefault(x => x.Id == uId);
             }
 
+            var entries = ChangeTracker.Entries().Where(x => x.Entity is IModifiable<Aenderungen, Benutzer> && (x.State == EntityState.Added || x.State == EntityState.Modified));
 
-            var entries = ChangeTracker.Entries().Where(x => x.Entity is ModifiedEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
             foreach (var entry in entries)
             {
-                if (user != null)
-                {
-                    ((ModifiedEntity)entry.Entity).ModifiedUser = user;
-                    //user.ModifiedEntity.Add(((ModifiedEntity)entry.Entity));
-                }
+                var entity = ((IModifiable<Aenderungen, Benutzer>)entry.Entity);
 
                 if (entry.State == EntityState.Added)
                 {
-                    ((ModifiedEntity)entry.Entity).Created = DateTime.UtcNow;
+                    entity.AddAenderung(EntityAenderungenType.Erstellt, user);
                 }
-
-            ((ModifiedEntity)entry.Entity).Modified = DateTime.UtcNow;
-
+                else
+                {
+                    entity.AddAenderung(EntityAenderungenType.Modifiziert, user);
+                }
+                //((Aenderungen)entry.Entity).Modified = DateTime.UtcNow;
             }
         }
     }
