@@ -2,8 +2,13 @@
 <div class="main">
   <app-nav-bar-side></app-nav-bar-side>
   <section class="main-content">
-    <button (click)="onClickLogout()">Logout</button>
-    <button (click)="onClickGetAllBenutzer()">GetAllBenutzer</button>
-    <button (click)="onClickGetAllCodeContent()">GetAllCodeContent</button>
+    <div class="main-content-nav">
+      <button (click)="onClickLogout()">Logout</button>
+      <button (click)="onClickGetAllBenutzer()">GetAllBenutzer</button>
+      <button (click)="onClickGetAllCodeContent()">GetAllCodeContent</button>
+    </div>
+    <div class="main-content-item">
+      <prism language="typescript" [code]="code"></prism>
+    </div>
   </section>
 </div>
