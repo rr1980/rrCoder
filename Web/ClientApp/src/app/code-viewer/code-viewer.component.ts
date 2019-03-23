@@ -1,4 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-code-viewer',
+  templateUrl: './code-viewer.component.html',
+  styleUrls: ['./code-viewer.component.css']
+})
+export class CodeViewerComponent implements OnInit {
+
+  language = 'html';
+  code = `import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
@@ -12,7 +22,8 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-
+  language = 'html';
+  code = '<p>test</p>';
 
   title = 'ClientApp';
 
@@ -52,4 +63,12 @@ export class HomeComponent implements OnInit {
         })
       );
   }
+}
+`;
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
 }

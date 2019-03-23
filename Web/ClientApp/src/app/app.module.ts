@@ -6,13 +6,9 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { httpInterceptorProviders } from './helper/auth-interceptor';
 import { DevExtremeModule } from "devextreme-angular";
+import { CodeViewerModule } from './code-viewer/code-viewer.module';
 
-import { PrismModule } from '@sgbj/angular-prism';
 
-import 'prismjs/prism';
-import 'prismjs/components/prism-typescript';
-//import 'prismjs/components/prism-scss';
-//import 'prismjs/components/prism-markup';
 
 
 @NgModule({
@@ -24,7 +20,7 @@ import 'prismjs/components/prism-typescript';
     BrowserModule,
     HttpClientModule,
     DevExtremeModule,
-    PrismModule,
+    CodeViewerModule,
     AppRoutingModule
   ],
   providers: [
