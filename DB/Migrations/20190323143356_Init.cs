@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DB.Migrations
 {
-    public partial class Init1 : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -36,16 +36,26 @@ namespace DB.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Erstellt_Datum = table.Column<DateTime>(nullable: false),
+                    Erstellt_UserId = table.Column<int>(nullable: true),
+                    Geaendert_Datum = table.Column<DateTime>(nullable: true),
+                    Geaendert_UserId = table.Column<int>(nullable: true),
                     Betreff = table.Column<string>(nullable: true),
-                    Text = table.Column<string>(nullable: true),
-                    UserId = table.Column<int>(nullable: true)
+                    Text = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CodeContent", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CodeContent_User_UserId",
-                        column: x => x.UserId,
+                        name: "FK_CodeContent_User_Erstellt_UserId",
+                        column: x => x.Erstellt_UserId,
+                        principalSchema: "rrCoder",
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CodeContent_User_Geaendert_UserId",
+                        column: x => x.Geaendert_UserId,
                         principalSchema: "rrCoder",
                         principalTable: "User",
                         principalColumn: "Id",
@@ -59,9 +69,12 @@ namespace DB.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Erstellt_Datum = table.Column<DateTime>(nullable: false),
+                    Erstellt_UserId = table.Column<int>(nullable: true),
+                    Geaendert_Datum = table.Column<DateTime>(nullable: true),
+                    Geaendert_UserId = table.Column<int>(nullable: true),
                     Betreff = table.Column<string>(nullable: true),
                     Text = table.Column<string>(nullable: true),
-                    UserId = table.Column<int>(nullable: true),
                     CodeContentId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -75,70 +88,20 @@ namespace DB.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Bemerkung_User_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Bemerkung_User_Erstellt_UserId",
+                        column: x => x.Erstellt_UserId,
+                        principalSchema: "rrCoder",
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Bemerkung_User_Geaendert_UserId",
+                        column: x => x.Geaendert_UserId,
                         principalSchema: "rrCoder",
                         principalTable: "User",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateTable(
-                name: "Aenderungen",
-                schema: "rrCoder",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Type = table.Column<int>(nullable: true),
-                    Datum = table.Column<DateTime>(nullable: true),
-                    UserId = table.Column<int>(nullable: true),
-                    CodeContentId = table.Column<int>(nullable: true),
-                    BemerkungId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Aenderungen", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Aenderungen_Bemerkung_BemerkungId",
-                        column: x => x.BemerkungId,
-                        principalSchema: "rrCoder",
-                        principalTable: "Bemerkung",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Aenderungen_CodeContent_CodeContentId",
-                        column: x => x.CodeContentId,
-                        principalSchema: "rrCoder",
-                        principalTable: "CodeContent",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Aenderungen_User_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "rrCoder",
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Aenderungen_BemerkungId",
-                schema: "rrCoder",
-                table: "Aenderungen",
-                column: "BemerkungId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Aenderungen_CodeContentId",
-                schema: "rrCoder",
-                table: "Aenderungen",
-                column: "CodeContentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Aenderungen_UserId",
-                schema: "rrCoder",
-                table: "Aenderungen",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bemerkung_CodeContentId",
@@ -147,24 +110,32 @@ namespace DB.Migrations
                 column: "CodeContentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bemerkung_UserId",
+                name: "IX_Bemerkung_Erstellt_UserId",
                 schema: "rrCoder",
                 table: "Bemerkung",
-                column: "UserId");
+                column: "Erstellt_UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CodeContent_UserId",
+                name: "IX_Bemerkung_Geaendert_UserId",
+                schema: "rrCoder",
+                table: "Bemerkung",
+                column: "Geaendert_UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CodeContent_Erstellt_UserId",
                 schema: "rrCoder",
                 table: "CodeContent",
-                column: "UserId");
+                column: "Erstellt_UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CodeContent_Geaendert_UserId",
+                schema: "rrCoder",
+                table: "CodeContent",
+                column: "Geaendert_UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Aenderungen",
-                schema: "rrCoder");
-
             migrationBuilder.DropTable(
                 name: "Bemerkung",
                 schema: "rrCoder");

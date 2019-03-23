@@ -1,7 +1,7 @@
-﻿using Common;
-using Entities;
+﻿using Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -12,9 +12,6 @@ namespace DB
     {
         private IHttpContextAccessor _httpContextAccessor;
 
-        //public DbSet<BaseEntity> BaseEntity { get; set; }
-
-        public DbSet<Aenderungen> Aenderungen { get; set; }
         public DbSet<Benutzer> Benutzer { get; set; }
         public DbSet<Bemerkung> Bemerkungen { get; set; }
         public DbSet<CodeContent> CodeContents { get; set; }
@@ -29,37 +26,26 @@ namespace DB
 
             modelBuilder.HasDefaultSchema(schema: "rrCoder");
 
-            modelBuilder.Ignore<BaseEntity>();
-
-            modelBuilder.Entity<Aenderungen>(entity =>
-            {
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.AusgefuehrteAenderungen);
-
-                entity.HasOne(d => d.CodeContent)
-                    .WithMany(p => p.Aenderungen);
-
-                entity.HasOne(d => d.Bemerkung)
-                    .WithMany(p => p.Aenderungen);
-            });
-
             modelBuilder.Entity<CodeContent>(entity =>
             {
                 entity.ToTable("CodeContent");
 
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.CodeContent);
+                entity.HasOne(d => d.Erstellt_User)
+                    .WithMany(p => p.Erstellt_CodeContent);
+
+                entity.HasOne(c => c.Geaendert_User)
+                    .WithMany(b => b.Geaenderte_CodeContent);
             });
 
             modelBuilder.Entity<Bemerkung>(entity =>
             {
                 entity.ToTable("Bemerkung");
 
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Bemerkungen);
+                entity.HasOne(d => d.Erstellt_User)
+                    .WithMany(p => p.Erstellt_Bemerkung);
 
-                entity.HasOne(d => d.CodeContent)
-                    .WithMany(p => p.Bemerkungen);
+                entity.HasOne(c => c.Geaendert_User)
+                    .WithMany(b => b.Geaenderte_Bemerkung);
             });
 
             modelBuilder.Entity<Benutzer>(entity =>
@@ -92,21 +78,20 @@ namespace DB
                 user = Benutzer.FirstOrDefault(x => x.Id == uId);
             }
 
-            var entries = ChangeTracker.Entries().Where(x => x.Entity is IModifiable<Aenderungen, Benutzer> && (x.State == EntityState.Added || x.State == EntityState.Modified));
+            var entries = ChangeTracker.Entries().Where(x => x.Entity is ModifiablEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
 
             foreach (var entry in entries)
             {
-                var entity = ((IModifiable<Aenderungen, Benutzer>)entry.Entity);
+                var entity = ((ModifiablEntity)entry.Entity);
 
                 if (entry.State == EntityState.Added)
                 {
-                    entity.AddAenderung(EntityAenderungenType.Erstellt, user);
+                    entity.Erstellt_User = user;
+                    entity.Erstellt_Datum = DateTime.UtcNow;
                 }
-                else
-                {
-                    entity.AddAenderung(EntityAenderungenType.Modifiziert, user);
-                }
-                //((Aenderungen)entry.Entity).Modified = DateTime.UtcNow;
+
+                entity.Geaendert_User = user;
+                entity.Geaendert_Datum = DateTime.UtcNow;
             }
         }
     }

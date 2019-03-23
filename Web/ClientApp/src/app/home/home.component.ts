@@ -20,8 +20,17 @@ export class HomeComponent implements OnInit {
   }
 
 
-  onClickTest() {
-    this.ajax_post<any>("/api/Users/GetAll", null).subscribe((response) => {
+  onClickGetAllBenutzer() {
+    this.ajax_post<any>("/api/Benutzer/GetAll", null).subscribe((response) => {
+
+      console.debug({ "Test": response });
+
+    });
+  }
+
+
+  onClickGetAllCodeContent() {
+    this.ajax_post<any>("/api/CodeContent/GetAll", null).subscribe((response) => {
 
       console.debug({ "Test": response });
 

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DB.Migrations
 {
     [DbContext(typeof(RRCoderDBContext))]
-    [Migration("20190323015408_Init1")]
+    [Migration("20190323145624_Init1")]
     partial class Init1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -22,33 +22,6 @@ namespace DB.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Entities.Aenderungen", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("BemerkungId");
-
-                    b.Property<int?>("CodeContentId");
-
-                    b.Property<DateTime?>("Datum");
-
-                    b.Property<int?>("Type");
-
-                    b.Property<int?>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BemerkungId");
-
-                    b.HasIndex("CodeContentId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Aenderungen");
-                });
-
             modelBuilder.Entity("Entities.Bemerkung", b =>
                 {
                     b.Property<int>("Id")
@@ -59,15 +32,23 @@ namespace DB.Migrations
 
                     b.Property<int?>("CodeContentId");
 
-                    b.Property<string>("Text");
+                    b.Property<DateTime>("Erstellt_Datum");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int?>("Erstellt_UserId");
+
+                    b.Property<DateTime?>("Geaendert_Datum");
+
+                    b.Property<int?>("Geaendert_UserId");
+
+                    b.Property<string>("Text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CodeContentId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Erstellt_UserId");
+
+                    b.HasIndex("Geaendert_UserId");
 
                     b.ToTable("Bemerkung");
                 });
@@ -78,15 +59,15 @@ namespace DB.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("FirstName");
-
-                    b.Property<string>("LastName");
+                    b.Property<string>("Name");
 
                     b.Property<string>("Password");
 
                     b.Property<string>("Role");
 
                     b.Property<string>("Username");
+
+                    b.Property<string>("Vorname");
 
                     b.HasKey("Id");
 
@@ -101,30 +82,23 @@ namespace DB.Migrations
 
                     b.Property<string>("Betreff");
 
-                    b.Property<string>("Text");
+                    b.Property<DateTime>("Erstellt_Datum");
 
-                    b.Property<int?>("UserId");
+                    b.Property<int?>("Erstellt_UserId");
+
+                    b.Property<DateTime?>("Geaendert_Datum");
+
+                    b.Property<int?>("Geaendert_UserId");
+
+                    b.Property<string>("Text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Erstellt_UserId");
+
+                    b.HasIndex("Geaendert_UserId");
 
                     b.ToTable("CodeContent");
-                });
-
-            modelBuilder.Entity("Entities.Aenderungen", b =>
-                {
-                    b.HasOne("Entities.Bemerkung", "Bemerkung")
-                        .WithMany("Aenderungen")
-                        .HasForeignKey("BemerkungId");
-
-                    b.HasOne("Entities.CodeContent", "CodeContent")
-                        .WithMany("Aenderungen")
-                        .HasForeignKey("CodeContentId");
-
-                    b.HasOne("Entities.Benutzer", "User")
-                        .WithMany("AusgefuehrteAenderungen")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Entities.Bemerkung", b =>
@@ -133,16 +107,24 @@ namespace DB.Migrations
                         .WithMany("Bemerkungen")
                         .HasForeignKey("CodeContentId");
 
-                    b.HasOne("Entities.Benutzer", "User")
-                        .WithMany("Bemerkungen")
-                        .HasForeignKey("UserId");
+                    b.HasOne("Entities.Benutzer", "Erstellt_User")
+                        .WithMany("Erstellt_Bemerkung")
+                        .HasForeignKey("Erstellt_UserId");
+
+                    b.HasOne("Entities.Benutzer", "Geaendert_User")
+                        .WithMany("Geaenderte_Bemerkung")
+                        .HasForeignKey("Geaendert_UserId");
                 });
 
             modelBuilder.Entity("Entities.CodeContent", b =>
                 {
-                    b.HasOne("Entities.Benutzer", "User")
-                        .WithMany("CodeContent")
-                        .HasForeignKey("UserId");
+                    b.HasOne("Entities.Benutzer", "Erstellt_User")
+                        .WithMany("Erstellt_CodeContent")
+                        .HasForeignKey("Erstellt_UserId");
+
+                    b.HasOne("Entities.Benutzer", "Geaendert_User")
+                        .WithMany("Geaenderte_CodeContent")
+                        .HasForeignKey("Geaendert_UserId");
                 });
 #pragma warning restore 612, 618
         }

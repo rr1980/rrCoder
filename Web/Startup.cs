@@ -1,4 +1,5 @@
-﻿using Common;
+﻿using AutoMapper;
+using Common;
 using DB;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -28,6 +29,7 @@ namespace Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+            services.AddAutoMapper();
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(options =>
@@ -79,8 +81,9 @@ namespace Web
             });
 
             services.AddHttpContextAccessor();
-            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRepository, Repository>();
+            services.AddScoped<IBenutzerService, BenutzerService>();
+            services.AddScoped<ICodeContentService, CodeContentService>();
 
 
             services.AddSpaStaticFiles(configuration =>

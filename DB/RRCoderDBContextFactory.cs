@@ -53,15 +53,15 @@ namespace DB
                 {
                     Betreff = "C#",
                     Text = "Test",
-                    User = context.Benutzer.FirstOrDefault()
+                    //Benutzer = context.Benutzer.FirstOrDefault()
                 };
 
-                cc.Bemerkungen.Add(new Bemerkung
-                {
-                    Betreff = "Information",
-                    Text = "Test",
-                    User = context.Benutzer.FirstOrDefault()
-                });
+                //cc.Bemerkungen.Add(new Bemerkung
+                //{
+                //    Betreff = "Information",
+                //    Text = "Test",
+                //    //User = context.Benutzer.FirstOrDefault()
+                //});
 
                 context.AddRange(cc);
                 context.SaveChanges();

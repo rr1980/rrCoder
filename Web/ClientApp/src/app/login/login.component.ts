@@ -31,7 +31,7 @@ export class LoginComponent implements OnInit {
   }
 
   onClickLogin() {
-    this.ajax_post<User>("/api/Users/authenticate", { username: this.login, password: this.password }).subscribe((response) => {
+    this.ajax_post<User>("/api/Benutzer/authenticate", { username: this.login, password: this.password }).subscribe((response) => {
 
       localStorage.setItem('currentUser', JSON.stringify(response));
       console.debug({ "Login": response });
