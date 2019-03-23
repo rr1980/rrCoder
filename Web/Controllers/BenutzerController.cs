@@ -1,9 +1,9 @@
 ﻿using Common;
-using Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using System.Threading.Tasks;
+using VievModels;
 
 namespace Web.Controllers
 {
@@ -49,14 +49,14 @@ namespace Web.Controllers
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate([FromBody]Benutzer userParam)
+        public async Task<IActionResult> Authenticate([FromBody]BenutzerVievmodel vm)
         {
-            var user = await _benutzeService.Authenticate(userParam.Username, userParam.Password);
+            var benutzer = await _benutzeService.Authenticate(vm.Username, vm.Password);
 
-            if (user == null)
+            if (benutzer == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
 
-            return Ok(user);
+            return Ok(benutzer);
         }
 
         [Authorize(Roles = Role.Admin)]

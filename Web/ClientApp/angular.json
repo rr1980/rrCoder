@@ -31,7 +31,7 @@
             ],
             "styles": [
               "./node_modules/devextreme/dist/css/dx.common.css",
-              "./node_modules/devextreme/dist/css/dx.light.css",
+              "./node_modules/devextreme/dist/css/dx.dark.css",
               "src/styles.scss"
             ],
             "scripts": [],
@@ -91,7 +91,7 @@
             "styles": [
               "src/styles.scss",
               "./node_modules/devextreme/dist/css/dx.common.css",
-              "./node_modules/devextreme/dist/css/dx.light.css"
+              "./node_modules/devextreme/dist/css/dx.dark.css"
             ],
             "scripts": [],
             "assets": [
