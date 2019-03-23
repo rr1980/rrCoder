@@ -1,0 +1,14 @@
+
+@import "../../../variables.base.scss";
+
+:host {
+  display: flex;
+  flex-direction: column;
+  background-color: $nav-bg-side;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 10vw;
+  order: 1;
+  align-items: stretch;
+  border-right: 2px solid $base-border-color;
+}

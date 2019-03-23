@@ -1,18 +1,33 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
+import { AppRoutingModule, routedComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
+import { httpInterceptorProviders } from './helper/auth-interceptor';
+import { DevExtremeModule } from "devextreme-angular";
+import { CodeViewerModule } from './code-viewer/code-viewer.module';
+
+
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    routedComponents
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
+    DevExtremeModule,
+    CodeViewerModule,
     AppRoutingModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    httpInterceptorProviders
+  ],
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule { }
