@@ -1,8 +1,9 @@
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
+<app-nav-bar-up></app-nav-bar-up>
+<div class="main">
+  <app-nav-bar-side></app-nav-bar-side>
+  <section class="main-content">
+    <button (click)="onClickLogout()">Logout</button>
+    <button (click)="onClickGetAllBenutzer()">GetAllBenutzer</button>
+    <button (click)="onClickGetAllCodeContent()">GetAllCodeContent</button>
+  </section>
 </div>
-<button (click)="onClickLogout()">Logout</button>
-<button (click)="onClickGetAllBenutzer()">GetAllBenutzer</button>
-<button (click)="onClickGetAllCodeContent()">GetAllCodeContent</button>

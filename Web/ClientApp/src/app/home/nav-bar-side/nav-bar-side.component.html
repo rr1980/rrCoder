@@ -1,0 +1,10 @@
+
+<dx-list [dataSource]="navigation"
+         [hoverStateEnabled]="true"
+         [activeStateEnabled]="true"
+         [focusStateEnabled]="false"
+         selectionMode="single"
+         [showSelectionControls]="false"
+         (onItemClick)="onItemClick($event)"
+         [(selectedItems)]="selected_navigation">
+</dx-list>

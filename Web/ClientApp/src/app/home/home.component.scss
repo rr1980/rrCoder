@@ -1,0 +1,25 @@
+
+@import "../../variables.base.scss";
+
+:host {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+}
+
+.main-content {
+  padding: 1em;
+}
+
+
+.main {
+  display: flex;
+  flex: 1;
+}
+
+.main > .main-content {
+  background-color: $base-bg;
+  flex: 1;
+  order: 2;
+}
