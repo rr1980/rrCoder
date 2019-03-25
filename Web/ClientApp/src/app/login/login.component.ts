@@ -40,13 +40,11 @@ export class LoginComponent implements OnInit {
 
     var validation_results = params.validationGroup.validate();
 
-    console.debug(validation_results);
 
     if (validation_results.isValid) {
       this.ajax_post<User>("/api/Benutzer/authenticate", this.data).subscribe((response) => {
 
         localStorage.setItem('currentUser', JSON.stringify(response));
-        console.debug({ "Login": response });
 
         this.router.navigate(['/home']);
       });

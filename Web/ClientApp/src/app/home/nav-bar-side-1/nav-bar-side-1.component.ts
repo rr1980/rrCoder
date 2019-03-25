@@ -7,11 +7,11 @@ export class List {
 }
 
 @Component({
-  selector: 'app-nav-bar-side',
-  templateUrl: './nav-bar-side.component.html',
-  styleUrls: ['./nav-bar-side.component.scss']
+  selector: 'app-nav-bar-side-1',
+  templateUrl: './nav-bar-side-1.component.html',
+  styleUrls: ['./nav-bar-side-1.component.scss']
 })
-export class NavBarSideComponent implements OnInit {
+export class NavBarSide1Component implements OnInit {
 
   navigation: List[] = [
     { id: 1, text: "Products", icon: "product" },

@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule, routedComponents } from './app-routing.module';
@@ -9,14 +10,14 @@ import { DevExtremeModule } from "devextreme-angular";
 
 
 
-
 @NgModule({
   declarations: [
     AppComponent,
-    routedComponents
+    routedComponents,
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     DevExtremeModule,
     AppRoutingModule

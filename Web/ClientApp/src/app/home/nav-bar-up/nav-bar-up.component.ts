@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 export class Category {
   text: string;
   icon: string;
   badge?: number;
+  click: (e) => void;
 }
 
 @Component({
@@ -16,23 +18,35 @@ export class NavBarUpComponent implements OnInit {
   navBarData: Category[] = [
     {
       text: "Contacts",
-      icon: "user"
-    }, {
+      icon: "user",
+      click: e => {
+        this.router.navigate(['/intern/home', { outlets: { sideBar: 'sideBar1', content: 'codeContent' } }]);
+      }
+    },
+    {
+      text: "Favorites",
+      icon: "favorites",
+      click: e => {
+        this.router.navigate(['/intern/home', { outlets: { sideBar: 'sideBar2', content: 'admin' } }]);
+      }
+    },
+    {
       text: "Missed",
       icon: "clock",
-      badge: 3
-    }, {
-      text: "Favorites",
-      icon: "favorites"
+      badge: 3,
+      click: e => {
+        localStorage.removeItem('currentUser');
+        this.router.navigate(['/login']);
+      }
     }
-  ];
+  ] as Category[];
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
 
-  selectionChanged(e) {
-    console.debug("nav", e);
+  onItemClick(e) {
+    e.itemData.click(e);
   }
 }

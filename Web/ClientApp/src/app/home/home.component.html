@@ -2,13 +2,8 @@
 <div class="main">
   <router-outlet name="sideBar"></router-outlet>
   <section class="main-content">
-    <div class="main-content-nav">
-      <button (click)="onClickLogout()">Logout</button>
-      <button (click)="onClickGetAllBenutzer()">GetAllBenutzer</button>
-      <button (click)="onClickGetAllCodeContent()">GetAllCodeContent</button>
-    </div>
-    <div class="main-content-item">
-      <router-outlet name="content"></router-outlet>
+    <div class="main-content-item" [@routeAnimations]="o.isActivated ? o.activatedRoute : ''">
+      <router-outlet #o="outlet" name="content"></router-outlet>
     </div>
   </section>
 </div>

@@ -5,14 +5,14 @@ import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './helper/auth-guard';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  //{ path: 'home', component: HomeComponent, canActivate: [AuthGuard], data: { roles: ["User"] } },
-  { path: 'home', loadChildren: "./home/home.module#HomeModule", canActivate: [AuthGuard], data: { roles: ["User"] } },
+  { path: '', redirectTo: 'intern', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'intern', loadChildren: "./home/home.module#HomeModule", canActivate: [AuthGuard], data: { roles: ["User"] } },
+  { path: '**', redirectTo: 'intern' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
+  imports: [RouterModule.forRoot(routes, { enableTracing: false, useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
