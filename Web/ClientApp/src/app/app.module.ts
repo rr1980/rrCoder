@@ -6,7 +6,6 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { httpInterceptorProviders } from './helper/auth-interceptor';
 import { DevExtremeModule } from "devextreme-angular";
-import { CodeViewerModule } from './code-viewer/code-viewer.module';
 
 
 
@@ -20,7 +19,6 @@ import { CodeViewerModule } from './code-viewer/code-viewer.module';
     BrowserModule,
     HttpClientModule,
     DevExtremeModule,
-    CodeViewerModule,
     AppRoutingModule
   ],
   providers: [

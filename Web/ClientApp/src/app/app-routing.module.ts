@@ -2,14 +2,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './helper/auth-guard';
-import { NavBarUpComponent } from './home/nav-bar-up/nav-bar-up.component';
-import { NavBarSideComponent } from './home/nav-bar-side/nav-bar-side.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard], data: { roles: ["User"] } },
+  //{ path: 'home', component: HomeComponent, canActivate: [AuthGuard], data: { roles: ["User"] } },
+  { path: 'home', loadChildren: "./home/home.module#HomeModule", canActivate: [AuthGuard], data: { roles: ["User"] } },
   { path: 'login', component: LoginComponent },
 ];
 
@@ -19,4 +17,4 @@ const routes: Routes = [
 })
 export class AppRoutingModule { }
 
-export const routedComponents = [LoginComponent, HomeComponent, NavBarUpComponent, NavBarSideComponent];
+export const routedComponents = [LoginComponent];
