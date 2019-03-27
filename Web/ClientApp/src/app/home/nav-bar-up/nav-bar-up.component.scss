@@ -2,11 +2,86 @@
 @import "../../../variables.base.scss";
 
 :host {
-  display: flex;
-  flex-direction: column;
+  /*background-color: $nav-bg-up;
+  border-bottom: 2px solid $base-border-color;*/
+  /**/
+  /*display: flex;
+  flex-direction: row !important;*/
+  /**/
+  /*flex-grow: 0;
+  flex-shrink: 0;*/
+  /*flex-basis: 7.5vh;*/
+  /**/
+  /*justify-content: flex-start;
+  align-items: stretch;*/
+}
+
+.nav-up {
   background-color: $nav-bg-up;
-  justify-content: center;
   border-bottom: 2px solid $base-border-color;
-  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  flex-grow: 0;
+  flex-shrink: 1;
   flex-basis: 7.5vh;
+  align-items: stretch;
+}
+
+.nav-up-item {
+  background-color: $base-button-bg;
+  display: flex;
+  flex: 1;
+  flex-grow: 0;
+  flex-shrink: 1;
+  /*flex-basis: 20vw;*/
+  flex-basis: auto;
+  align-items: stretch;
+  padding: 1em;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  transition: all 0.5s;
+  /*background-color: #4CAF50;*/
+}
+
+.nav-up-item:hover {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.nav-up-item:hover span {
+  padding-right: 1em;
+}
+
+.nav-up-item:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+.nav-up-item span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.nav-up-item span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.nav-up-item-stretch {
+  display: flex;
+  flex: 3;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: 100%;
+  align-items: stretch;
 }

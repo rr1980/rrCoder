@@ -9,9 +9,15 @@
 }
 
 
-.main-content {
+
+.home {
   display: flex;
-  padding: 1em;
+  flex-direction: column;
+}
+
+.nabBarUp {
+  display: flex;
+  flex-direction: column;
 }
 
 .main {
@@ -20,7 +26,9 @@
   overflow: hidden;
 }
 
-.main > .main-content {
+
+.main-content {
+  padding: 1em;
   display: flex;
   background-color: $base-bg1;
   flex: 1;

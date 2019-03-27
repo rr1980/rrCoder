@@ -1,7 +1,12 @@
-<app-nav-bar-up></app-nav-bar-up>
-<div class="main">
-  <router-outlet name="sideBar"></router-outlet>
-  <section class="main-content">
-    <router-outlet #o="outlet" name="content"></router-outlet>
-  </section>
+
+<div class="home">
+  <div class="nabBarUp">
+    <app-nav-bar-up></app-nav-bar-up>
+  </div>
+  <div class="main">
+    <router-outlet name="sideBar"></router-outlet>
+    <section class="main-content">
+      <router-outlet #o="outlet" name="content"></router-outlet>
+    </section>
+  </div>
 </div>

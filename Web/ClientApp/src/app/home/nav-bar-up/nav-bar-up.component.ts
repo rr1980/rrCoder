@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 
 export class Category {
@@ -11,7 +11,8 @@ export class Category {
 @Component({
   selector: 'app-nav-bar-up',
   templateUrl: './nav-bar-up.component.html',
-  styleUrls: ['./nav-bar-up.component.scss']
+  styleUrls: ['./nav-bar-up.component.scss'],
+  //encapsulation: ViewEncapsulation.Emulated
 })
 export class NavBarUpComponent implements OnInit {
 
