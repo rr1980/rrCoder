@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { map, first } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { fadeInAnimation } from '../helper/route-animation';
 
 interface User {
   id?: number;
@@ -18,7 +19,9 @@ interface User {
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  animations: [fadeInAnimation],
+  host: { '[@fadeInAnimation]': '' }
 })
 export class LoginComponent implements OnInit {
 

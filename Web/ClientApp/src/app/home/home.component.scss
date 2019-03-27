@@ -25,11 +25,17 @@
   background-color: $base-bg1;
   flex: 1;
   order: 2;
-  overflow: hidden;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: auto;
+  overflow: auto;
   flex-direction: column;
+  /*margin-top: 1em;*/
+  /*overflow: hidden;
+  flex-direction: column;*/
 }
 
-.main-content-item {
+/*.main-content-item {
   display: flex;
   flex: 1;
   flex-grow: 0;
@@ -38,4 +44,4 @@
   overflow: auto;
   flex-direction: column;
   margin-top: 1em;
-}
+}*/

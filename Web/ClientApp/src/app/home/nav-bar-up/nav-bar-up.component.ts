@@ -44,6 +44,7 @@ export class NavBarUpComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() {
+    //this.onItemClick();
   }
 
   onItemClick(e) {

@@ -2,8 +2,6 @@
 <div class="main">
   <router-outlet name="sideBar"></router-outlet>
   <section class="main-content">
-    <div class="main-content-item" [@routeAnimations]="o.isActivated ? o.activatedRoute : ''">
-      <router-outlet #o="outlet" name="content"></router-outlet>
-    </div>
+    <router-outlet #o="outlet" name="content"></router-outlet>
   </section>
 </div>
