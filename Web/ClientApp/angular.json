@@ -23,15 +23,13 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "progress": true,
-                        "extractCss": true,
-                        "showCircularDependencies": true,
+            "extractCss": true,
+            "showCircularDependencies": true,
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "./node_modules/devextreme/dist/css/dx.common.css",
-              "./node_modules/devextreme/dist/css/dx.dark.css",
               "src/styles.scss"
             ],
             "scripts": [],
@@ -90,8 +88,6 @@
             "karmaConfig": "src/karma.conf.js",
             "styles": [
               "src/styles.scss",
-              "./node_modules/devextreme/dist/css/dx.common.css",
-              "./node_modules/devextreme/dist/css/dx.dark.css"
             ],
             "scripts": [],
             "assets": [

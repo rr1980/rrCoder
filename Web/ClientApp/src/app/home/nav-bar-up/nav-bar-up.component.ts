@@ -47,6 +47,8 @@ export class NavBarUpComponent implements OnInit {
   }
 
   onItemClick(e) {
+    localStorage.removeItem('currentUser');
+    this.router.navigate(['/login']);
     e.itemData.click(e);
   }
 }

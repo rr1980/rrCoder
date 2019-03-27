@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
-import { Router } from '@angular/router';
-import notify from 'devextreme/ui/notify';
+import { map, first } from 'rxjs/operators';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 interface User {
   id?: number;
@@ -24,43 +24,44 @@ export class LoginComponent implements OnInit {
 
   title = 'ClientApp';
 
-  data: any = {
-    username: "",
-    password: ""
-  };
+  loading = false;
+  loginForm: FormGroup;
+  returnUrl: string;
+  submitted = false;
 
-
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private formBuilder: FormBuilder, private route: ActivatedRoute, ) { }
 
   ngOnInit() {
+    this.loginForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    });
+
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
-  onClickLogin(params) {
+  get f() { return this.loginForm.controls; }
 
+  onClickLogin() {
+    this.submitted = true;
 
-    var validation_results = params.validationGroup.validate();
+    if (this.loginForm.invalid) {
+      console.debug("invalid");
 
-
-    if (validation_results.isValid) {
-      this.ajax_post<User>("/api/Benutzer/authenticate", this.data).subscribe((response) => {
-
-        localStorage.setItem('currentUser', JSON.stringify(response));
-
-        this.router.navigate(['/home']);
-      });
+      return;
     }
-    else {
-      var msg = "";
-      for (let err of validation_results.brokenRules) {
-        msg += err.message + "\r\n";
-      }
 
-      notify({
-        message: msg,
-        width: 600
-      }, "error", 3000);
 
-    }
+    this.loading = true;
+    this.ajax_post<User>("/api/Benutzer/authenticate", { username: this.f.username.value, password: this.f.password.value }).pipe(first()).subscribe((response) => {
+
+      localStorage.setItem('currentUser', JSON.stringify(response));
+
+      this.router.navigate([this.returnUrl]);
+    }, (error) => {
+      this.loading = false;
+      console.debug({ username: this.f.username.value, password: this.f.password.value }, error);
+    });
   }
 
   ajax_post<T>(url: string, data: any): Observable<T> {
