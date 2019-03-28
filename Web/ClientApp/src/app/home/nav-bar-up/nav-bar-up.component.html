@@ -1,13 +1,11 @@
-<!--<dx-nav-bar [dataSource]="navBarData"
-            (onItemClick)="onItemClick($event)"
-            [selectedIndex]="0"></dx-nav-bar>-->
-<div class="nav-up">
-  <div class="nav-up-item" (click)="onItemClick($event)">
-    <span>Logout </span>
-  </div>
-  <div class="nav-up-item-stretch">
-  </div>
-  <div class="nav-up-item">
-    <button (click)="onItemClick($event)">Logout</button>
-  </div>
+<div class="nav-up-item" (click)="onCodeClick($event)">
+  Code
+</div>
+<div class="nav-up-item" (click)="onAdminClick($event)">
+  Admin
+</div>
+<div class="nav-up-item-stretch">
+</div>
+<div class="nav-up-item" (click)="onLogoutClick($event)">
+  Logout
 </div>

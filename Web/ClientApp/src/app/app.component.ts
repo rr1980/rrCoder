@@ -5,7 +5,7 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  encapsulation: ViewEncapsulation.Emulated
+  //encapsulation: ViewEncapsulation.Emulated
 })
 export class AppComponent {
 

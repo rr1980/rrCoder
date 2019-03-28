@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { slideInOutAnimation } from '../helper/route-animation';
+import { slideInOutAnimation, fadeInAnimation } from '../helper/route-animation';
 
 @Component({
   selector: 'app-code-viewer',
   templateUrl: './code-viewer.component.html',
   styleUrls: ['./code-viewer.component.css'],
-  animations: [slideInOutAnimation],
-  host: { '[@slideInOutAnimation]': '' }
+  animations: [fadeInAnimation],
+  host: { '[@fadeInAnimation]': '' }
 })
 export class CodeViewerComponent implements OnInit {
 

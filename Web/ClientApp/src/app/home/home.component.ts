@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { fadeInAnimation } from '../helper/route-animation';
+import { ConcatSource } from 'webpack-sources';
 
 
 @Component({
@@ -16,5 +17,6 @@ export class HomeComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.debug("Start Home!");
   }
 }

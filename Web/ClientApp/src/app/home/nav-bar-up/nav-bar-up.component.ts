@@ -45,12 +45,18 @@ export class NavBarUpComponent implements OnInit {
   constructor(private router: Router) { }
 
   ngOnInit() {
-    //this.onItemClick();
   }
 
-  onItemClick(e) {
+  onCodeClick(e) {
+    this.router.navigate(['/intern/home', { outlets: { sideBar: 'sideBar1', content: 'codeContent' } }]);
+  }
+
+  onAdminClick(e) {
+    this.router.navigate(['/intern/home', { outlets: { sideBar: 'sideBar2', content: 'admin' } }]);
+  }
+
+  onLogoutClick(e) {
     localStorage.removeItem('currentUser');
     this.router.navigate(['/login']);
-    e.itemData.click(e);
   }
 }

@@ -3,53 +3,43 @@
 
 :host {
   display: flex;
-  height: 100%;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   flex-direction: column;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: auto;
 }
 
-
-
-.home {
-  display: flex;
-  flex-direction: column;
-}
-
-.nabBarUp {
-  display: flex;
-  flex-direction: column;
+.up-bar-content {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 2vh;
 }
 
 .main {
   display: flex;
-  flex: 1;
-  overflow: hidden;
-}
-
-
-.main-content {
-  padding: 1em;
-  display: flex;
-  background-color: $base-bg1;
-  flex: 1;
-  order: 2;
-  flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis: auto;
-  overflow: auto;
-  flex-direction: column;
-  /*margin-top: 1em;*/
-  /*overflow: hidden;
-  flex-direction: column;*/
-}
-
-/*.main-content-item {
-  display: flex;
-  flex: 1;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
   flex-grow: 0;
   flex-shrink: 1;
   flex-basis: auto;
-  overflow: auto;
-  flex-direction: column;
-  margin-top: 1em;
-}*/
+  height: 94vh;
+}
+
+.side-bar-content {
+  order: 1;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: 10vw;
+}
+
+.main-content {
+  order: 2;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: 90vw;
+  padding: 1vw;
+  background-color: $base-bg1;
+}
