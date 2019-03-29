@@ -4,16 +4,21 @@ namespace Common
 {
     public class AppError : Exception
     {
-        public string ClassName
-        {
-            get
-            {
-                return this.GetType().Name;
-            }
-        }
         public int StatusCode { get; set; }
         public DateTime Time { get; set; }
         public Exception Exception { get; set; }
+
+        public string ErrorType { get; set; }
+
+        public AppError(string message) : base(message)
+        {
+            Time = DateTime.Now;
+        }
+
+        public AppError(string message, Exception inner) : base(message, inner)
+        {
+            Time = DateTime.Now;
+        }
 
         public AppError(string message, Exception inner, int statusCode) : base(message, inner)
         {
@@ -22,9 +27,23 @@ namespace Common
         }
     }
 
-    public class LoginError : Exception
+    public abstract class BaseError : Exception
     {
-        public LoginError(string message) : base(message)
+        public string Name { get; set; }
+        public string ErrorType { get; set; }
+
+        public BaseError() { }
+
+        public BaseError(string message, string name, string errorType) : base(message)
+        {
+            Name = name;
+            ErrorType = errorType;
+        }
+    }
+
+    public class ForbiddenError : BaseError
+    {
+        public ForbiddenError(string message) : base(message, "Auth failure", "UserError")
         {
 
         }
