@@ -13,15 +13,16 @@
 
 
 .nav-up-item:hover {
-  background-color: #4CAF50;
+  background-color: rgba(75, 135, 78, 0.5);
   color: white;
 }
 
 .nav-up-item {
-  background-color: $base-button-bg;
-  border-left: 5px solid #4CAF50;
+  /*background-color: $base-button-bg;*/
+  background: linear-gradient(to right, rgba(75, 135, 78, 0.5) 1%, $base-button-bg 13%);
+  /*border-left: 5px solid #4CAF50;*/
   display: inline-flex;
-  padding: 1em;
+  padding: 1rem 3rem 1rem 3rem;
   flex: 1;
   justify-content: center;
   flex-grow: 0;
@@ -34,7 +35,6 @@
 
 .nav-up-item-stretch {
   display: flex;
-  padding: 1em;
   flex: 1;
   flex-grow: 1;
   flex-shrink: 0;

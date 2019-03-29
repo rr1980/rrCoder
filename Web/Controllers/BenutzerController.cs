@@ -22,6 +22,7 @@ namespace Web.Controllers
         [HttpPost("GetAll")]
         public async Task<IActionResult> GetAll()
         {
+            throw new System.Exception("NA NÖÖÖ!");
             var values = await _codeContentService.GetAllCodeContent();
             return Ok(values);
         }
@@ -54,7 +55,10 @@ namespace Web.Controllers
             var benutzer = await _benutzeService.Authenticate(vm.Username, vm.Password);
 
             if (benutzer == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
+            {
+                throw new LoginError("Username or password is incorrect");
+                //return StatusCode(403, new { message = "Username or password is incorrect" });
+            }
 
             return Ok(benutzer);
         }

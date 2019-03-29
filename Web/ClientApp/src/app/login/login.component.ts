@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { map, first } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { fadeInAnimation } from '../helper/route-animation';
+import { AjaxService } from '../helper/ajax.service';
 
 interface User {
   id?: number;
@@ -32,7 +30,7 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
   submitted = false;
 
-  constructor(private http: HttpClient, private router: Router, private formBuilder: FormBuilder, private route: ActivatedRoute, ) { }
+  constructor(private router: Router, private formBuilder: FormBuilder, private route: ActivatedRoute, private ajaxService: AjaxService) { }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -56,7 +54,8 @@ export class LoginComponent implements OnInit {
 
 
     this.loading = true;
-    this.ajax_post<User>("/api/Benutzer/authenticate", { username: this.f.username.value, password: this.f.password.value }).pipe(first()).subscribe((response) => {
+
+    this.ajaxService.post<User>("Benutzer/authenticate", { username: this.f.username.value, password: this.f.password.value }).subscribe((response) => {
 
       localStorage.setItem('currentUser', JSON.stringify(response));
 
@@ -65,14 +64,5 @@ export class LoginComponent implements OnInit {
       this.loading = false;
       console.debug({ username: this.f.username.value, password: this.f.password.value }, error);
     });
-  }
-
-  ajax_post<T>(url: string, data: any): Observable<T> {
-    return this.http.post<any>(url, data)
-      .pipe(
-        map((response) => {
-          return response as T;
-        })
-      );
   }
 }

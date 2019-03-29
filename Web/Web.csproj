@@ -37,10 +37,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\app\helper\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="seed_users.json" />
   </ItemGroup>
 

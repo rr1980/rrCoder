@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { slideInOutAnimation, fadeInAnimation } from '../helper/route-animation';
 
+
+
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -20,6 +22,7 @@ export class AdminComponent implements OnInit {
 
 
   onClickGetAllBenutzer() {
+    throw new Error("Na Nö");
     this.ajax_post<any>("/api/Benutzer/GetAll", null).subscribe((response) => {
 
       console.debug({ "Test": response });

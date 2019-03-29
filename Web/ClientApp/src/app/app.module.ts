@@ -6,7 +6,10 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule, routedComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { httpInterceptorProviders } from './helper/auth-interceptor';
+import { AjaxService } from './helper/ajax.service';
+import { authInterceptorProviders } from './helper/auth.interceptor';
+import { ajaxErrorInterceptorProviders } from './helper/ajax.interceptor';
+import { errorHandlerProviders } from './helper/error.handler';
 
 
 
@@ -23,7 +26,10 @@ import { httpInterceptorProviders } from './helper/auth-interceptor';
     AppRoutingModule
   ],
   providers: [
-    httpInterceptorProviders
+    errorHandlerProviders,
+    //ajaxErrorInterceptorProviders,
+    authInterceptorProviders,
+    AjaxService
   ],
   bootstrap: [
     AppComponent
