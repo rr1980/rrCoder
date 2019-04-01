@@ -2,13 +2,14 @@ import { ErrorHandler, Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventService } from './event.service';
 import { throwError } from 'rxjs';
+import * as StackTraceParser from 'error-stack-parser';
 
 export interface IAppError {
   errorType: string;
   msg: string;
   name: string;
   showAlert: boolean;
-  stack: string;
+  stack: any;
   statusCode: number;
 }
 
@@ -18,7 +19,7 @@ export class GlobalErrorHandler implements ErrorHandler {
   constructor(private eventService: EventService) { }
 
   handleError(error: any | HttpErrorResponse) {
-
+    console.trace(error);
     var _error;
 
     if (error instanceof HttpErrorResponse) {
@@ -28,7 +29,7 @@ export class GlobalErrorHandler implements ErrorHandler {
         _error = this.buildServerError(error);
       }
     } else {
-      _error = this.buildError(error.name, error.message, error.stack);
+      _error = this.buildError(error.name, error.message, error);
     }
 
 
@@ -37,11 +38,11 @@ export class GlobalErrorHandler implements ErrorHandler {
     console.debug('error: ', _error);
   }
 
-  buildError(name: string, msg: string, stack?: string): IAppError {
+  buildError(name: string, msg: string, error: any): IAppError {
     return {
       name: name ? name : "no name",
       msg: msg ? msg : "no msg",
-      stack: stack ? stack : "no stack"
+      stack: StackTraceParser.parse(error)
     } as IAppError;
   }
 

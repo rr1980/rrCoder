@@ -63,16 +63,17 @@ export class EventService {
   private _subscriptions: ISubscription[] = [];
 
   fire(key: string, data: any) {
-    console.debug("Fire Event: '" + key + "'", data);
     var _sub = this._subscriptions.find(x => x.key === key.trim());
 
     if (_sub) {
       //console.debug("Event gefunden: '" + key + "'", data);
       _sub.bo.next(data);
+      //console.debug("Fire Event: '" + key + "'", data);
+
       return true;
     }
 
-    console.debug("Event nicht gefunden: '" + key + "'");
+    //console.debug("Event nicht gefunden: '" + key + "'");
     return false;
   }
 

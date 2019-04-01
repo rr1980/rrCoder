@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './helper/auth-guard';
+import { ModalComponent } from './modal/modal.component';
+import { ErrorComponent } from './error/error.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'intern', pathMatch: 'full' },
@@ -17,4 +19,4 @@ const routes: Routes = [
 })
 export class AppRoutingModule { }
 
-export const routedComponents = [LoginComponent];
+export const routedComponents = [LoginComponent, ModalComponent, ErrorComponent];

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { slideInOutAnimation, fadeInAnimation } from '../helper/route-animation';
+import { ModalService } from '../helper/modal.service';
 
 
 
@@ -15,13 +16,14 @@ import { slideInOutAnimation, fadeInAnimation } from '../helper/route-animation'
 })
 export class AdminComponent implements OnInit {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private modalService: ModalService) { }
 
   ngOnInit() {
   }
 
 
   onClickGetAllBenutzer() {
+    //this.modalService.open("error-modal");
     throw new Error("Na Nö");
     this.ajax_post<any>("/api/Benutzer/GetAll", null).subscribe((response) => {
 

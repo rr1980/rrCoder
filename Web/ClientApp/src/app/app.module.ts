@@ -11,6 +11,7 @@ import { authInterceptorProviders } from './helper/auth.interceptor';
 import { ajaxErrorInterceptorProviders } from './helper/ajax.interceptor';
 import { errorHandlerProviders } from './helper/error.handler';
 import { EventService } from './helper/event.service';
+import { ModalService } from './helper/modal.service';
 
 
 
@@ -27,6 +28,7 @@ import { EventService } from './helper/event.service';
     AppRoutingModule
   ],
   providers: [
+    ModalService,
     EventService,
     errorHandlerProviders,
     //ajaxErrorInterceptorProviders,

@@ -1,0 +1,38 @@
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ModalService } from '../helper/modal.service';
+import { Subscription } from 'rxjs';
+import { EventService } from '../helper/event.service';
+import { IAppError } from '../helper/error.handler';
+
+
+
+@Component({
+  selector: 'app-error',
+  templateUrl: './error.component.html',
+  styleUrls: ['./error.component.scss']
+})
+export class ErrorComponent implements OnInit, OnDestroy {
+
+  error: IAppError;
+  sub_error: Subscription;
+
+  constructor(private modalService: ModalService, private eventService: EventService) {
+  }
+
+  ngOnInit() {
+    this.sub_error = this.eventService.register("error").subscribe(error => {
+      this.error = error;
+      this.modalService.open("error-modal");
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.sub_error) {
+      this.sub_error.unsubscribe();
+    }
+  }
+
+  closeModal() {
+    this.modalService.close("error-modal");
+  }
+}
