@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { ModalService } from '../helper/modal.service';
 import { Subscription } from 'rxjs';
 import { EventService } from '../helper/event.service';
@@ -16,13 +16,23 @@ export class ErrorComponent implements OnInit, OnDestroy {
   error: IAppError;
   sub_error: Subscription;
 
-  constructor(private modalService: ModalService, private eventService: EventService) {
+  constructor(private modalService: ModalService, private eventService: EventService, private ref: ChangeDetectorRef) {
   }
 
   ngOnInit() {
     this.sub_error = this.eventService.register("error").subscribe(error => {
-      this.error = error;
-      this.modalService.open("error-modal");
+      if (error.hasOwnProperty("showAlert")) {
+        if (error.showAlert === true) {
+          this.error = error;
+          this.modalService.open("error-modal");
+          this.ref.detectChanges();
+        }
+      }
+      else {
+        this.error = error;
+        this.modalService.open("error-modal");
+        this.ref.detectChanges();
+      }
     });
   }
 
@@ -33,6 +43,8 @@ export class ErrorComponent implements OnInit, OnDestroy {
   }
 
   closeModal() {
-    this.modalService.close("error-modal");
+    this.modalService.close("error-modal", () => {
+      this.error = null;
+    });
   }
 }

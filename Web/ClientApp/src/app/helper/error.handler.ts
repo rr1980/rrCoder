@@ -3,7 +3,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { EventService } from './event.service';
 import { throwError } from 'rxjs';
 import * as StackTraceParser from 'error-stack-parser';
+import * as StackTrace from 'stacktrace-js';
+import * as _JSON from 'safe-json-stringify';
 
+""
 export interface IAppError {
   errorType: string;
   msg: string;
@@ -19,32 +22,82 @@ export class GlobalErrorHandler implements ErrorHandler {
   constructor(private eventService: EventService) { }
 
   handleError(error: any | HttpErrorResponse) {
-    console.trace(error);
-    var _error;
-
+    console.error(error);
     if (error instanceof HttpErrorResponse) {
       if (!navigator.onLine) {
         console.debug("// Handle offline error");
       } else {
-        _error = this.buildServerError(error);
+
+
+        if (error.error) {
+          let err = this.buildServerError(error);
+          this.eventService.fire("error", err);
+
+        }
+        else {
+          let err = {
+            showAlert: true,
+            statusCode: error.status,
+            name: error.name + " " + error.statusText,
+            msg: error.message,
+            stack: ""
+          } as IAppError;
+
+          this.eventService.fire("error", err);
+        }
       }
-    } else {
-      _error = this.buildError(error.name, error.message, error);
     }
+    else if (error.promise && error.rejection && error.rejection.ngParseErrors) {
+      console.debug("!!!!!!!!!!!!");
+      var _msg = "";
+      var _err = JSON.parse(JSON.stringify(error, this.getCircularReplacer(), 2));
+      for (var i = 0; i < _err.rejection.ngParseErrors.length; i++) {
+        _msg += _err.rejection.ngParseErrors[i].msg.replace(new RegExp('\n', 'g'), "<br />") + "<br /><br />";
+      }
+
+      console.debug("-1", _err);
+      console.debug("-2", _msg);
+    }
+    else {
+
+      StackTrace.fromError(error).then((stackframes) => {
+        const stackString = stackframes
+          .map(function (sf) {
+            return sf.fileName + ":" + sf.lineNumber + ":" + sf.columnNumber + "\t" + sf.functionName + "\r\n";
+          })
+          .toString()
+          .replace(/,/g, '')
+          .replace(/webpack:\/\/\//g, '')
+          .replace("webpack:///", "");
 
 
-    this.eventService.fire("error", _error);
+        var name = error.name ? error.name : "Error";
+        var message = error.message ? error.message : error.toString();
+        var err = {
+          showAlert: true,
+          name: name,
+          msg: message,
+          stack: stackString
+        } as IAppError;
 
-    console.debug('error: ', _error);
+        this.eventService.fire("error", err);
+      });
+    }
   }
 
-  buildError(name: string, msg: string, error: any): IAppError {
-    return {
-      name: name ? name : "no name",
-      msg: msg ? msg : "no msg",
-      stack: StackTraceParser.parse(error)
-    } as IAppError;
+  getCircularReplacer = () => {
+    const seen = new WeakSet;
+    return (key, value) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return;
+        }
+        seen.add(value);
+      }
+      return value;
+    };
   }
+
 
   buildServerError(error: any): IAppError {
 

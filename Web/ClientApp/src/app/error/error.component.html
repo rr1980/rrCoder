@@ -2,10 +2,12 @@
 <app-modal id="error-modal">
   <div class="modal">
     <div class="modal-body">
-      <h1>{{error.name}}</h1>
-      <p>{{error.msg}}</p>
-      <code>{{error.stack}}</code>
-      <button (click)="closeModal();">Close</button>
+      <div *ngIf="error">
+        <h1>{{error.name}}</h1>
+        <p>{{error.msg}}</p>
+        <pre>{{error.stack}}</pre>
+        <button (click)="closeModal();">Close</button>
+      </div>
     </div>
   </div>
   <div class="modal-background"></div>

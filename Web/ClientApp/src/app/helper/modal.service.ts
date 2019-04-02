@@ -22,9 +22,13 @@ export class ModalService {
     }
   }
 
-  close(id: string) {
+  close(id: string, cb: () => void = null) {
     // close modal specified by id
     let modal: any = this.modals.filter(x => x.id === id)[0];
     modal.close();
+
+    if (cb) {
+      cb();
+    }
   }
 }

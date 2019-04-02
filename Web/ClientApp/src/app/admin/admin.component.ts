@@ -23,13 +23,17 @@ export class AdminComponent implements OnInit {
 
 
   onClickGetAllBenutzer() {
+
+    var e;
+
+    e.name.trim();
     //this.modalService.open("error-modal");
-    throw new Error("Na Nö");
-    this.ajax_post<any>("/api/Benutzer/GetAll", null).subscribe((response) => {
+    //throw new Error("Na Nö");
+    //this.ajax_post<any>("/api/Benutzer/GetAll", null).subscribe((response) => {
 
-      console.debug({ "Test": response });
+    //  console.debug({ "Test": response });
 
-    });
+    //});
   }
 
 
