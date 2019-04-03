@@ -1,51 +1,58 @@
 ﻿using System;
+using System.Net;
 
 namespace Common
 {
-    public class AppError : Exception
+    public abstract class AppError : Exception
     {
-        public int StatusCode { get; set; }
+        public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.InternalServerError;
         public DateTime Time { get; set; }
-        public Exception Exception { get; set; }
+        public bool ShoeAlert { get; set; } = true;
 
-        public string ErrorType { get; set; }
-
-        public AppError(string message) : base(message)
-        {
-            Time = DateTime.Now;
-        }
-
-        public AppError(string message, Exception inner) : base(message, inner)
-        {
-            Time = DateTime.Now;
-        }
-
-        public AppError(string message, Exception inner, int statusCode) : base(message, inner)
+        public AppError(string message, HttpStatusCode statusCode = HttpStatusCode.InternalServerError, bool showAlert = true) : base(message)
         {
             Time = DateTime.Now;
             StatusCode = statusCode;
+            ShoeAlert = showAlert;
         }
     }
 
-    public abstract class BaseError : Exception
+
+    public class ForbiddenError : AppError
     {
-        public string Name { get; set; }
-        public string ErrorType { get; set; }
 
-        public BaseError() { }
-
-        public BaseError(string message, string name, string errorType) : base(message)
+        public ForbiddenError(string message, bool showAlert = true) : base(message, HttpStatusCode.Forbidden, showAlert)
         {
-            Name = name;
-            ErrorType = errorType;
         }
     }
 
-    public class ForbiddenError : BaseError
+    public class UnauthorizedError : AppError
     {
-        public ForbiddenError(string message) : base(message, "Auth failure", "UserError")
-        {
 
+        public UnauthorizedError(string message) : base(message, HttpStatusCode.Unauthorized, false)
+        {
         }
     }
 }
+
+
+//public abstract class BaseError : Exception
+//{
+
+//    public BaseError() { }
+
+//    {
+//        //Name = name;
+//        ShoeAlert = showAlert;
+//    }
+//}
+
+//    public abstract class StatusCodeError : AppError
+//{
+//        public HttpStatusCode StatusCode { get; protected set; } = HttpStatusCode.InternalServerError;
+
+//        public StatusCodeError(string message, HttpStatusCode statusCode, bool showAlert = true) : base(message, showAlert)
+//        {
+//            StatusCode = statusCode;
+//        }
+//    }

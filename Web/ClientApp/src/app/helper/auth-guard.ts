@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router/src/utils/preactivation';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
-import { JsonpCallbackContext } from '@angular/common/http/src/jsonp';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
@@ -12,11 +11,8 @@ export class AuthGuard implements CanActivate {
 
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    return true;
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const neededRoles = route.data["roles"];
-
-    console.debug(currentUser, neededRoles);
 
     if (currentUser && currentUser.token) {
 

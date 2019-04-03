@@ -47,32 +47,19 @@ namespace Web
                     if (contextFeature != null)
                     {
                         var orgError = contextFeature.Error;
-                        var statusCode = (int)HttpStatusCode.InternalServerError;
+                        context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
 
-                        AppError error = new AppError("Internal Server Error", orgError, statusCode);
-
-                        if (orgError is BaseError)
+                        if (orgError is AppError)
                         {
-                            error.ErrorType = ((BaseError)orgError).ErrorType;
-                        }
-                        else
-                        {
-                            error.ErrorType = "AppError";
-                        }
-
-                        if (orgError is ForbiddenError)
-                        {
-                            statusCode = (int)HttpStatusCode.Forbidden;
-                            error.StatusCode = statusCode;
+                            context.Response.StatusCode = (int)((AppError)orgError).StatusCode;
                         }
 
 
-                        var errorRespnse = JsonConvert.SerializeObject(error, JjonSerializerSettings);
+                        var errorRespnse = JsonConvert.SerializeObject(orgError, JjonSerializerSettings);
 
                         Debug.WriteLine(errorRespnse);
 
-                        context.Response.StatusCode = statusCode;
                         await context.Response.WriteAsync(errorRespnse);
                     }
                 });

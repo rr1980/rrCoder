@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 
@@ -10,13 +10,21 @@ interface ISubscription {
 @Injectable()
 export class EventService {
 
+  constructor(private _ngZone: NgZone) { }
+
   private _subscriptions: ISubscription[] = [];
 
   fire(key: string, data: any) {
     var _sub = this._subscriptions.find(x => x.key === key.trim());
 
     if (_sub) {
-      _sub.bo.next(data);
+
+      //_sub.bo.next(data);
+
+      this._ngZone.run(() => {
+        _sub.bo.next(data);
+      });
+
       //console.debug("Fire Event: '" + key + "'", data);
       return true;
     }

@@ -1,10 +1,9 @@
-import { Component, OnInit, setTestabilityGetter, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { fadeInAnimation } from '../helper/route-animation';
 import { AjaxService } from '../helper/ajax.service';
 import { EventService } from '../helper/event.service';
-import { IAppError } from '../helper/error.handler';
 import { Subscription } from 'rxjs';
 
 interface User {
@@ -36,7 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   sub_error: Subscription;
 
-  constructor(private router: Router, private formBuilder: FormBuilder, private route: ActivatedRoute, private ajaxService: AjaxService, private eventService: EventService, private ref: ChangeDetectorRef) {
+  constructor(private router: Router, private formBuilder: FormBuilder, private route: ActivatedRoute, private ajaxService: AjaxService, private eventService: EventService) {
   }
 
   ngOnInit() {
@@ -54,8 +53,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       if (error.statusCode === 403) {
         this.errorMsg = error.msg;
       }
-
-      this.ref.detectChanges();
     });
   }
 

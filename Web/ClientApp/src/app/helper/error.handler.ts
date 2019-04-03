@@ -1,12 +1,10 @@
-import { ErrorHandler, Injectable } from '@angular/core';
+import { ErrorHandler, Injectable, Injector, NgZone } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { EventService } from './event.service';
-import { throwError } from 'rxjs';
-import * as StackTraceParser from 'error-stack-parser';
 import * as StackTrace from 'stacktrace-js';
 import * as _JSON from 'safe-json-stringify';
+import { Router } from '@angular/router';
 
-""
 export interface IAppError {
   errorType: string;
   msg: string;
@@ -19,7 +17,8 @@ export interface IAppError {
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
 
-  constructor(private eventService: EventService) { }
+  constructor(private eventService: EventService, private injector: Injector, private _ngZone: NgZone) {
+  }
 
   handleError(error: any | HttpErrorResponse) {
     console.error(error);
@@ -28,8 +27,16 @@ export class GlobalErrorHandler implements ErrorHandler {
         console.debug("// Handle offline error");
       } else {
 
+        if (error.status === 401) {
+          console.debug("++");
+          localStorage.removeItem('currentUser');
+          const router = this.injector.get(Router);
 
-        if (error.error) {
+          this._ngZone.run(() => {
+            router.navigate(['/login']);
+          });
+        }
+        else if (error.error) {
           let err = this.buildServerError(error);
           this.eventService.fire("error", err);
 
@@ -71,7 +78,7 @@ export class GlobalErrorHandler implements ErrorHandler {
           .replace("webpack:///", "");
 
 
-        var name = error.name ? error.name : "Error";
+        var name = "CLIENT: " + (error.name ? error.name : "Error");
         var message = error.message ? error.message : error.toString();
         var err = {
           showAlert: true,
@@ -101,19 +108,18 @@ export class GlobalErrorHandler implements ErrorHandler {
 
   buildServerError(error: any): IAppError {
 
-    var innerE = this.getInnerE(error.error);
+    //var innerE = this.getInnerE(error.error);
 
     return {
-      showAlert: this.getShowAlert(error),
-      statusCode: this.getStatusCode(error.error),
-      name: this.getInnerE_name(innerE),
-      errorType: this.getErrorType(error.error),
-      msg: this.getInnerE_message(innerE),
-      stack: this.getInnerE_stack(innerE),
+      showAlert: this.get_ShowAlert(error),
+      statusCode: this.get_StatusCode(error),
+      name: "SERVER: " + this.get_Name(error),
+      msg: this.get_Message(error),
+      stack: this.get_Stack(error),
     } as IAppError;
   }
 
-  getShowAlert(error: any): any {
+  get_ShowAlert(error: any): any {
     if (error) {
       if (error.hasOwnProperty('showAlert')) {
         if (error.showAlert === false) {
@@ -132,55 +138,56 @@ export class GlobalErrorHandler implements ErrorHandler {
     }
   }
 
-  getStatusCode(error: any): any {
-    return error ? error.StatusCode ? error.StatusCode : null : null;
+  get_StatusCode(error: any): any {
+    if (error.error && error.error.StatusCode) {
+      return error.error.StatusCode;
+    }
+    else {
+      return error.status;
+    }
   }
 
-  getInnerE_stack(innerException: any): any {
-    if (innerException) {
-      if (innerException.StackTrace) {
-        return innerException.StackTrace;
-      }
-      else if (innerException.StackTraceString) {
-        return innerException.StackTraceString;
-      }
-      else {
-        return null;
+  get_Stack(error: any): any {
+    if (error.error) {
+      if (error.error.StackTraceString) {
+        return error.error.StackTraceString;
       }
     }
     else {
-      return null;
+      return "no stack";
     }
   }
 
-  getInnerE_message(innerException: any): any {
-    return innerException ? innerException.Message ? innerException.Message : null : null;
+  get_Message(error: any): any {
+    if (error.error && error.error.Message) {
+      return error.error.Message;
+    }
+    else {
+      return error.message;
+    }
   }
 
-  getErrorType(error: any): any {
-    return error ? error.ErrorType ? error.ErrorType : null : null;
-  }
 
-  getInnerE_name(innerException: any): any {
-    if (innerException) {
-      if (innerException.Name) {
-        return innerException.Name;
+  get_Name(error: any): any {
+    if (error.error) {
+      if (error.error.ClassName) {
+        return error.error.ClassName;
       }
-      else if (innerException.ClassName) {
-        return innerException.ClassName;
+      else if (error.error.Name) {
+        return error.error.Name;
       }
       else {
-        return null;
+        return "Unknown Error";
       }
     }
     else {
-      return null;
+      return error.name;
     }
   }
 
-  getInnerE(error: any): any {
-    return error ? error.InnerException ? error.InnerException : null : null;
-  }
+  //getInnerE(error: any): any {
+  //  return error ? error.InnerException ? error.InnerException : null : null;
+  //}
 }
 
 

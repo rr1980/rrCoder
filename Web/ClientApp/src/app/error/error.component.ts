@@ -25,7 +25,7 @@ export class ErrorComponent implements OnInit, OnDestroy {
         if (error.showAlert === true) {
           this.error = error;
           this.modalService.open("error-modal");
-          this.ref.detectChanges();
+          //this.ref.detectChanges();
         }
       }
       else {

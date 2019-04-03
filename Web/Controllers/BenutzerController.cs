@@ -10,35 +10,6 @@ namespace Web.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class CodeContentController : ControllerBase
-    {
-        private readonly ICodeContentService _codeContentService;
-
-        public CodeContentController(ICodeContentService codeContentService)
-        {
-            _codeContentService = codeContentService;
-        }
-        [Authorize(Roles = Role.Admin)]
-        [HttpPost("GetAll")]
-        public async Task<IActionResult> GetAll()
-        {
-            throw new System.Exception("NA NÖÖÖ!");
-            var values = await _codeContentService.GetAllCodeContent();
-            return Ok(values);
-        }
-
-        [Authorize(Roles = Role.Admin)]
-        [HttpPost("Add")]
-        public async Task Add()
-        {
-            await _codeContentService.Add();
-        }
-
-    }
-
-    [Authorize]
-    [ApiController]
-    [Route("api/[controller]")]
     public class BenutzerController : ControllerBase
     {
         private readonly IBenutzerService _benutzeService;
@@ -56,7 +27,7 @@ namespace Web.Controllers
 
             if (benutzer == null)
             {
-                throw new ForbiddenError("Username or password is incorrect");
+                throw new ForbiddenError("Username or password is incorrect", false);
                 //return StatusCode(403, new { message = "Username or password is incorrect" });
             }
 

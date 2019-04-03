@@ -47,7 +47,8 @@ namespace Services
                     new Claim(ClaimTypes.Name, benutzer.Id.ToString()),
                     new Claim(ClaimTypes.Role, benutzer.Role)
                 }),
-                Expires = DateTime.Now.AddHours(2),
+                //Expires = DateTime.Now.AddHours(2),
+                Expires = DateTime.Now.AddSeconds(10),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
