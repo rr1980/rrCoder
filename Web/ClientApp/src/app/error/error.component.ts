@@ -21,17 +21,17 @@ export class ErrorComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub_error = this.eventService.register("error").subscribe(error => {
+      console.debug("+");
       if (error.hasOwnProperty("showAlert")) {
         if (error.showAlert === true) {
           this.error = error;
           this.modalService.open("error-modal");
-          //this.ref.detectChanges();
         }
       }
       else {
         this.error = error;
         this.modalService.open("error-modal");
-        this.ref.detectChanges();
+        //this.ref.detectChanges();
       }
     });
   }

@@ -68,7 +68,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     else {
 
       StackTrace.fromError(error).then((stackframes) => {
-        const stackString = stackframes
+        let stackString = stackframes
           .map(function (sf) {
             return sf.fileName + ":" + sf.lineNumber + ":" + sf.columnNumber + "\t" + sf.functionName + "\r\n";
           })
@@ -80,6 +80,7 @@ export class GlobalErrorHandler implements ErrorHandler {
 
         var name = "CLIENT: " + (error.name ? error.name : "Error");
         var message = error.message ? error.message : error.toString();
+
         var err = {
           showAlert: true,
           name: name,

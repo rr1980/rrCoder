@@ -1,6 +1,7 @@
 // @import url('https://netdna.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.css');
 
-// @import "../../variables.base.scss";
+@import "../../variables.base.scss";
+
 /* MODAL STYLES
 -------------------------------*/
 
@@ -9,8 +10,9 @@
   display: none;
 }
 
-:host /deep/ .modal {
+.modal {
   /* modal container fixed across whole screen */
+  display: flex;
   position: fixed;
   top: 0;
   right: 0;
@@ -20,16 +22,73 @@
   z-index: 1000;
   /* enables scrolling for tall modals */
   overflow: auto;
+  justify-content: center;
+  align-items: center;
 
-  .modal-body {
-    padding: 20px;
-    background: #fff;
-    /* margin exposes part of the modal background */
-    margin: 40px;
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-basis: auto;
+    max-width: 75%;
+    max-height: 75%;
   }
 }
 
-:host /deep/ .modal-background {
+:host /deep/ .modal-header {
+  display: flex;
+  order: -1;
+  background: $base-bg1;
+  flex-grow: 0;
+  flex-shrink: 0;
+  padding: 1rem;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  color: $base-text-color;
+  font-weight: bold;
+  border-top-left-radius: $base-border-radius;
+  border-top-right-radius: $base-border-radius;
+  border-top: 1px solid $base-border-color;
+  border-left: 1px solid $base-border-color;
+  border-right: 1px solid $base-border-color;
+}
+
+:host /deep/ .modal-body {
+  background: $nav-bg-side;
+  color: $base-text-color;
+  overflow-y: auto;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  max-width: 100%;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  color: white;
+  border-left: 1px solid $base-border-color;
+  border-right: 1px solid $base-border-color;
+}
+
+:host /deep/ .modal-footer {
+  display: flex;
+  order: 99;
+  background: $base-bg1;
+  flex-grow: 0;
+  flex-shrink: 0;
+  padding: 1rem;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  color: $base-text-color;
+  font-weight: bold;
+  border-bottom-left-radius: $base-border-radius;
+  border-bottom-right-radius: $base-border-radius;
+  border-bottom: 1px solid $base-border-color;
+  border-left: 1px solid $base-border-color;
+  border-right: 1px solid $base-border-color;
+}
+
+.modal-background {
   /* modal background fixed across whole screen */
   position: fixed;
   top: 0;
