@@ -12,6 +12,7 @@ import { ajaxErrorInterceptorProviders } from './helper/ajax.interceptor';
 import { errorHandlerProviders } from './helper/error.handler';
 import { EventService } from './helper/event.service';
 import { ModalService } from './helper/modal.service';
+import { AuthService } from './helper/auth.service';
 
 
 
@@ -33,7 +34,8 @@ import { ModalService } from './helper/modal.service';
     errorHandlerProviders,
     //ajaxErrorInterceptorProviders,
     authInterceptorProviders,
-    AjaxService
+    AjaxService,
+    AuthService
   ],
   bootstrap: [
     AppComponent

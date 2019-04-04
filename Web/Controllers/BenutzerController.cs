@@ -27,7 +27,7 @@ namespace Web.Controllers
 
             if (benutzer == null)
             {
-                throw new ForbiddenError("Username or password is incorrect", false);
+                throw new ForbiddenError("Username or password is incorrect");
                 //return StatusCode(403, new { message = "Username or password is incorrect" });
             }
 

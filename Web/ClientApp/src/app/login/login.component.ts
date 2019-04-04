@@ -1,10 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { fadeInAnimation } from '../helper/route-animation';
-import { AjaxService } from '../helper/ajax.service';
-import { EventService } from '../helper/event.service';
-import { Subscription } from 'rxjs';
+import { AuthService } from '../helper/auth.service';
 
 interface User {
   id?: number;
@@ -33,9 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   submitted = false;
   errorMsg: string;
 
-  sub_error: Subscription;
-
-  constructor(private router: Router, private formBuilder: FormBuilder, private route: ActivatedRoute, private ajaxService: AjaxService, private eventService: EventService) {
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private authService: AuthService) {
   }
 
   ngOnInit() {
@@ -45,21 +41,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-
-    this.sub_error = this.eventService.register("error").subscribe(error => {
-
-      this.loading = false;
-
-      if (error.statusCode === 403) {
-        this.errorMsg = error.msg;
-      }
-    });
   }
 
   ngOnDestroy(): void {
-    if (this.sub_error) {
-      this.sub_error.unsubscribe();
-    }
   }
 
   get f() { return this.loginForm.controls; }
@@ -74,14 +58,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
 
-
     this.loading = true;
 
-    this.ajaxService.post<User>("Benutzer/authenticate", { username: this.f.username.value, password: this.f.password.value }, false).subscribe((response) => {
-
-      localStorage.setItem('currentUser', JSON.stringify(response));
-
-      this.router.navigate([this.returnUrl]);
+    this.authService.login({ username: this.f.username.value, password: this.f.password.value }, this.returnUrl, (err) => {
+      this.loading = false;
+      if (err.status === 403) {
+        this.errorMsg = err.error.Message;
+      }
     });
   }
 }

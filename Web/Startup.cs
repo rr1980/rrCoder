@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Services;
 using Services.Interfaces;
+using System;
 using System.Text;
 
 namespace Web
@@ -61,24 +62,24 @@ namespace Web
 
 
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(x =>
             {
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateLifetime = true,
                     ValidateIssuer = true,
+                    ValidateActor = true,
                     ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
                     ValidIssuer = "http://localhost:5000",
                     ValidAudience = "http://localhost:5000",
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    SaveSigninToken = true,
+                    ClockSkew = TimeSpan.Zero
+
                 };
             });
 

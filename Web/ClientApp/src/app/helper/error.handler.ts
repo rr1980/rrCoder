@@ -4,12 +4,12 @@ import { EventService } from './event.service';
 import * as StackTrace from 'stacktrace-js';
 import * as _JSON from 'safe-json-stringify';
 import { Router } from '@angular/router';
+import { throwError } from 'rxjs';
 
 export interface IAppError {
   errorType: string;
   msg: string;
   name: string;
-  showAlert: boolean;
   stack: any;
   statusCode: number;
 }
@@ -28,8 +28,7 @@ export class GlobalErrorHandler implements ErrorHandler {
       } else {
 
         if (error.status === 401) {
-          console.debug("++");
-          localStorage.removeItem('currentUser');
+          sessionStorage.removeItem('currentUser');
           const router = this.injector.get(Router);
 
           this._ngZone.run(() => {
@@ -43,7 +42,6 @@ export class GlobalErrorHandler implements ErrorHandler {
         }
         else {
           let err = {
-            showAlert: true,
             statusCode: error.status,
             name: error.name + " " + error.statusText,
             msg: error.message,
@@ -82,7 +80,6 @@ export class GlobalErrorHandler implements ErrorHandler {
         var message = error.message ? error.message : error.toString();
 
         var err = {
-          showAlert: true,
           name: name,
           msg: message,
           stack: stackString
@@ -91,6 +88,8 @@ export class GlobalErrorHandler implements ErrorHandler {
         this.eventService.fire("error", err);
       });
     }
+
+    return throwError(error);
   }
 
   getCircularReplacer = () => {
@@ -112,7 +111,6 @@ export class GlobalErrorHandler implements ErrorHandler {
     //var innerE = this.getInnerE(error.error);
 
     return {
-      showAlert: this.get_ShowAlert(error),
       statusCode: this.get_StatusCode(error),
       name: "SERVER: " + this.get_Name(error),
       msg: this.get_Message(error),
@@ -120,24 +118,24 @@ export class GlobalErrorHandler implements ErrorHandler {
     } as IAppError;
   }
 
-  get_ShowAlert(error: any): any {
-    if (error) {
-      if (error.hasOwnProperty('showAlert')) {
-        if (error.showAlert === false) {
-          return false;
-        }
-        else {
-          return true;
-        }
-      }
-      else {
-        return true;
-      }
-    }
-    else {
-      return true;
-    }
-  }
+  //get_ShowAlert(error: any): any {
+  //  if (error) {
+  //    if (error.hasOwnProperty('showAlert')) {
+  //      if (error.showAlert === false) {
+  //        return false;
+  //      }
+  //      else {
+  //        return true;
+  //      }
+  //    }
+  //    else {
+  //      return true;
+  //    }
+  //  }
+  //  else {
+  //    return true;
+  //  }
+  //}
 
   get_StatusCode(error: any): any {
     if (error.error && error.error.StatusCode) {

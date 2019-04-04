@@ -1,31 +1,23 @@
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router/src/utils/preactivation';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { AuthService } from './auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
   path: ActivatedRouteSnapshot[];
   route: ActivatedRouteSnapshot;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    const neededRoles = route.data["roles"];
 
-    if (currentUser && currentUser.token) {
-
-      var role = neededRoles.find(x => x.toLowerCase() === currentUser.role.toLowerCase());
-
-      if (role || currentUser.role.toLowerCase() === 'admin') {
-        return true;
-      }
-      else {
-        console.warn("Keine Rechte! Benötigt wird '" + JSON.stringify(neededRoles) + "'");
-        return false;
-      }
+    if (this.authService.isLogin(route.data["roles"])) {
+      return true;
     }
+
+    console.warn("Keine Rechte! Benötigt wird '" + JSON.stringify(route.data["roles"]) + "'");
 
     this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } });
     return false;

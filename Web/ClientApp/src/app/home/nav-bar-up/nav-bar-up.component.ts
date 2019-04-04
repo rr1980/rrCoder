@@ -36,7 +36,7 @@ export class NavBarUpComponent implements OnInit {
       icon: "clock",
       badge: 3,
       click: e => {
-        localStorage.removeItem('currentUser');
+        sessionStorage.removeItem('currentUser');
         this.router.navigate(['/login']);
       }
     }
@@ -56,7 +56,7 @@ export class NavBarUpComponent implements OnInit {
   }
 
   onLogoutClick(e) {
-    localStorage.removeItem('currentUser');
+    sessionStorage.removeItem('currentUser');
     this.router.navigate(['/login']);
   }
 }

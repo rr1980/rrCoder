@@ -36,10 +36,12 @@ namespace Services
             if (benutzer == null)
                 return null;
 
+            var now = DateTime.UtcNow;
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
+                NotBefore = now,
                 Audience = "http://localhost:5000",
                 Issuer = "http://localhost:5000",
                 Subject = new ClaimsIdentity(new Claim[]
@@ -48,7 +50,7 @@ namespace Services
                     new Claim(ClaimTypes.Role, benutzer.Role)
                 }),
                 //Expires = DateTime.Now.AddHours(2),
-                Expires = DateTime.Now.AddSeconds(10),
+                Expires = now.Add(TimeSpan.FromHours(1)),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
