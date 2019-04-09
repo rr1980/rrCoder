@@ -4,7 +4,7 @@ import { AdComponent } from '../../tab/ad.component';
 @Component({
   selector: 'app-code-viewer-suche',
   templateUrl: './code-viewer-suche.component.html',
-  styleUrls: ['./code-viewer-suche.component.css']
+  styleUrls: ['./code-viewer-suche.component.scss']
 })
 export class CodeViewerSucheComponent implements AdComponent, OnInit, OnDestroy {
 

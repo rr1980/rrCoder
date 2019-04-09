@@ -1,9 +1,8 @@
 <div class="tab-nav-content">
-  <div *ngFor="let ad of _ads" (click)="onClickTabNav(ad)" class="tab-nav-content-item" [ngClass]="{'isAcive' : isActive === ad.navId}">
+  <div *ngFor="let ad of ads" (click)="onClickTabNav(ad)" class="tab-nav-content-item" [ngClass]="{'isAcive' : isActive === ad.navId}">
     <span>{{ad.name}}</span><button *ngIf="ad.canClose" (click)="onClickClose(ad)">x</button>
   </div>
 </div>
 <div class="tab-content">
-  <div *ngFor="let ad of _ads" [ngClass]="{'isHidden' : isActive != ad.navId}"  navId="{{ad.navId}}" ad-host class="tab-content-item">
-  </div>
+  <app-tab-content [ad]="ad" [isHidden]="isActive != ad.navId" *ngFor="let ad of ads"></app-tab-content>
 </div>

@@ -8,13 +8,11 @@ import { TabComponent } from '../tab/tab.component';
 @Component({
   selector: 'app-code-viewer',
   templateUrl: './code-viewer.component.html',
-  styleUrls: ['./code-viewer.component.css'],
+  styleUrls: ['./code-viewer.component.scss'],
   animations: [fadeInAnimation],
   host: { '[@fadeInAnimation]': '' }
 })
 export class CodeViewerComponent implements OnInit, AfterViewInit {
-
-  @ViewChild(TabComponent) tab: TabComponent;
 
   ads: AdItem[];
 
@@ -26,15 +24,14 @@ export class CodeViewerComponent implements OnInit, AfterViewInit {
 
   onEvent(event) {
     this.counter++;
-    this.tab.add(new AdItem(CodeViewerContentComponent, this.counter.toString(), true, null, { content: this.counter.toString() }));
+    this.ads.push(new AdItem(CodeViewerContentComponent, this.counter.toString(), true, null, { content: this.counter.toString() }));
   }
 
   ngOnInit() {
+    this.ads = [new AdItem(CodeViewerSucheComponent, "Suche", false, this.onEvent, { name: 'Suche' })];
   }
 
   ngAfterViewInit(): void {
-    this.tab.add(new AdItem(CodeViewerSucheComponent, "Suche", false, this.onEvent, { name: 'Suche' }));
-
   }
 }
 

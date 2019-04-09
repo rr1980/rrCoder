@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TabComponent } from './tab.component';
-import { AdDirective } from './ad.directive';
+import { TabContentComponent } from './tab-content/tab-content.component';
 
 @NgModule({
-   imports: [
-      CommonModule
-   ],
-   declarations: [
-      TabComponent,
-      AdDirective
-   ],
-   exports: [
-      TabComponent
-   ]
+  imports: [
+    CommonModule
+  ],
+  declarations: [
+    TabComponent,
+    TabContentComponent,
+  ],
+  exports: [
+    TabComponent
+  ]
 })
 export class TabModule { }

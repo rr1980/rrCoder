@@ -1,63 +1,35 @@
-import { Component, OnInit, ComponentFactoryResolver, QueryList, ViewChildren, Renderer2 } from '@angular/core';
+import { Component, OnInit, Input, IterableDiffers, DoCheck, IterableDiffer } from '@angular/core';
 import { AdItem } from './ad-item';
-import { AdDirective } from './ad.directive';
-import { AdComponent } from './ad.component';
 
 
 @Component({
   selector: 'app-tab',
   templateUrl: './tab.component.html',
-  styleUrls: ['./tab.component.scss'],
+  styleUrls: ['./tab.component.scss']
 })
-export class TabComponent implements OnInit {
+export class TabComponent implements OnInit, DoCheck {
 
-  @ViewChildren(AdDirective) adHosts: QueryList<AdDirective>;
-
-  _ads: AdItem[] = [];
+  @Input() ads: AdItem[] = [];
 
   isActive: string;
+  differ: IterableDiffer<any>;
 
-  constructor(private componentFactoryResolver: ComponentFactoryResolver, private renderer: Renderer2) {
+  constructor(differs: IterableDiffers) {
+    this.differ = differs.find(this.ads).create(null);
   }
 
   ngOnInit() {
+    this.isActive = this.ads[0].navId;
   }
 
-
-  public add(ad: AdItem) {
-    this._ads.push(ad);
-
-    setTimeout(() => {
-      this.set();
-      this.isActive = ad.navId;
-    }, 0);
-  }
-
-  private set() {
-
-    var _adHosts = this.adHosts.toArray().filter(x => x.init === false);
-
-    for (var i = 0; i < _adHosts.length; i++) {
-      var ad = this._ads.find(x => x.navId === _adHosts[i].navId);
-
-      let componentFactory = this.componentFactoryResolver.resolveComponentFactory(ad.component);
-
-      let viewContainerRef = _adHosts[i].viewContainerRef;
-      viewContainerRef.clear();
-
-      let componentRef = viewContainerRef.createComponent(componentFactory);
-      (<AdComponent>componentRef.instance).data = ad.data;
-      (<AdComponent>componentRef.instance).onEvent = ad.onEvent;
-
-
-      this.renderer.appendChild(
-        viewContainerRef.element.nativeElement,
-        componentRef.location.nativeElement
-      );
-      _adHosts[i].init = true;
+  ngDoCheck() {
+    const changes = this.differ.diff(this.ads);
+    if (changes) {
+      changes.forEachAddedItem((change) => {
+        this.isActive = change.item.navId;
+      });
     }
   }
-
 
   onClickTabNav(ad: AdItem) {
     this.isActive = ad.navId;
@@ -65,14 +37,14 @@ export class TabComponent implements OnInit {
 
   onClickClose(ad: AdItem) {
 
-    var index = this._ads.indexOf(ad);
+    var index = this.ads.indexOf(ad);
 
     if (index > -1) {
-      this._ads.splice(index, 1);
+      this.ads.splice(index, 1);
     }
 
-    if (ad.navId === this.isActive && this._ads[0] != null) {
-      this.isActive = this._ads[0].navId
+    if (ad.navId === this.isActive && this.ads[0] != null) {
+      this.isActive = this.ads[0].navId
     }
   }
 }
