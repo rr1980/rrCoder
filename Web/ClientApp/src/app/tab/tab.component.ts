@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ComponentFactoryResolver, QueryList, ViewChildren, AfterViewInit, OnChanges, SimpleChanges, ChangeDetectionStrategy, Renderer2 } from '@angular/core';
+import { Component, OnInit, ComponentFactoryResolver, QueryList, ViewChildren, Renderer2 } from '@angular/core';
 import { AdItem } from './ad-item';
 import { AdDirective } from './ad.directive';
 import { AdComponent } from './ad.component';
@@ -8,16 +8,14 @@ import { AdComponent } from './ad.component';
   selector: 'app-tab',
   templateUrl: './tab.component.html',
   styleUrls: ['./tab.component.scss'],
-  //changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TabComponent implements OnInit{
-
-  init: boolean = true;
-
-  _ads: AdItem[] = [];
+export class TabComponent implements OnInit {
 
   @ViewChildren(AdDirective) adHosts: QueryList<AdDirective>;
 
+  _ads: AdItem[] = [];
+
+  isActive: string;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver, private renderer: Renderer2) {
   }
@@ -36,9 +34,6 @@ export class TabComponent implements OnInit{
   }
 
   private set() {
-    if (!this.init) {
-      return;
-    }
 
     var _adHosts = this.adHosts.toArray().filter(x => x.init === false);
 
@@ -55,9 +50,6 @@ export class TabComponent implements OnInit{
       (<AdComponent>componentRef.instance).onEvent = ad.onEvent;
 
 
-      console.debug(_adHosts[i], componentRef);
-
-
       this.renderer.appendChild(
         viewContainerRef.element.nativeElement,
         componentRef.location.nativeElement
@@ -66,7 +58,6 @@ export class TabComponent implements OnInit{
     }
   }
 
-  isActive: string;
 
   onClickTabNav(ad: AdItem) {
     this.isActive = ad.navId;
@@ -78,6 +69,10 @@ export class TabComponent implements OnInit{
 
     if (index > -1) {
       this._ads.splice(index, 1);
+    }
+
+    if (ad.navId === this.isActive && this._ads[0] != null) {
+      this.isActive = this._ads[0].navId
     }
   }
 }

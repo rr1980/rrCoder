@@ -20,33 +20,20 @@ export class CodeViewerComponent implements OnInit, AfterViewInit {
 
   constructor() {
     this.onEvent = this.onEvent.bind(this);
-    //this.ads = [
-    //  new AdItem(CodeViewerSucheComponent, "Suche", this.onEvent, { name: 'Suche' }),
-    //];
   }
 
   counter: number = 0;
 
   onEvent(event) {
-    console.debug("event", event);
     this.counter++;
-    this.tab.add(new AdItem(CodeViewerContentComponent, this.counter.toString(), null, { content: this.counter.toString() }));
-
-    //this.ads.push(new AdItem(CodeViewerContentComponent, event, this.onEvent, { name: event }));
-
-    //var tmp = [
-    //  new AdItem(CodeViewerSucheComponent, "Suche", this.onEvent, { name: 'Suche' }),
-    //];
-    //tmp.push();
-
-    //this.ads = tmp;
+    this.tab.add(new AdItem(CodeViewerContentComponent, this.counter.toString(), true, null, { content: this.counter.toString() }));
   }
 
   ngOnInit() {
   }
 
   ngAfterViewInit(): void {
-    this.tab.add(new AdItem(CodeViewerSucheComponent, "Suche", this.onEvent, { name: 'Suche' }));
+    this.tab.add(new AdItem(CodeViewerSucheComponent, "Suche", false, this.onEvent, { name: 'Suche' }));
 
   }
 }

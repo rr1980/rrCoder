@@ -5,7 +5,7 @@ export class AdItem {
   public navId: string;
 
 
-  constructor(public component: Type<any>, public name: string, public onEvent: (event) => void, public data: any) {
+  constructor(public component: Type<any>, public name: string, public canClose: boolean, public onEvent: (event) => void, public data: any) {
     this.navId = this.newGuid();
   }
 

@@ -1,6 +1,6 @@
 <div class="tab-nav-content">
   <div *ngFor="let ad of _ads" (click)="onClickTabNav(ad)" class="tab-nav-content-item" [ngClass]="{'isAcive' : isActive === ad.navId}">
-    <span>{{ad.name}}</span><button (click)="onClickClose(ad)">x</button>
+    <span>{{ad.name}}</span><button *ngIf="ad.canClose" (click)="onClickClose(ad)">x</button>
   </div>
 </div>
 <div class="tab-content">
