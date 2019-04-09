@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -45,25 +46,67 @@ namespace DB
                 var users = JsonConvert.DeserializeObject<List<Benutzer>>(File.ReadAllText(path));
                 context.AddRange(users);
                 context.SaveChanges();
-            }
 
-            if (!context.CodeContents.Any())
-            {
-                var cc = new CodeContent
+                var user = users.FirstOrDefault();
+
+                // -----
+
+                var cs = new CodeSnippet
                 {
-                    Betreff = "C#",
-                    Text = "Test",
-                    //Benutzer = context.Benutzer.FirstOrDefault()
+                    Name = "C#",
+                    Beschreibung = "abc",
                 };
 
-                //cc.Bemerkungen.Add(new Bemerkung
-                //{
-                //    Betreff = "Information",
-                //    Text = "Test",
-                //    //User = context.Benutzer.FirstOrDefault()
-                //});
+                cs.Geaendert_User = user;
+                cs.Erstellt_User = user;
+                cs.Erstellt_Datum = DateTime.Now;
 
-                context.AddRange(cc);
+                // -----
+
+                var b1 = new Bemerkung
+                {
+                    Betreff = "Information",
+                    Text = "Test",
+                };
+
+                b1.Geaendert_User = user;
+                b1.Erstellt_User = user;
+                b1.Erstellt_Datum = DateTime.Now;
+
+                cs.Bemerkungen.Add(b1);
+
+                // -----
+
+                var cc = new CodeContent
+                {
+                    Name = "C#",
+                    Beschreibung = "abc",
+                    Content = "Test",
+                };
+
+                cc.Geaendert_User = user;
+                cc.Erstellt_User = user;
+                cc.Erstellt_Datum = DateTime.Now;
+
+                cs.CodeContents.Add(cc);
+
+                // -----
+
+                var b2 = new Bemerkung
+                {
+                    Betreff = "Information",
+                    Text = "Test",
+                };
+
+                b2.Geaendert_User = user;
+                b2.Erstellt_User = user;
+                b2.Erstellt_Datum = DateTime.Now;
+
+                cc.Bemerkungen.Add(b2);
+
+                // -----
+
+                context.Add(cs);
                 context.SaveChanges();
             }
         }

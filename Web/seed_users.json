@@ -1,7 +1,7 @@
 ﻿[
   {
-    "FirstName": "Max",
-    "LastName": "Mustermann",
+    "Name": "Max",
+    "Vorname": "Mustermann",
     "Username": "admin",
     "Password": "admin",
     "Role": "Admin"

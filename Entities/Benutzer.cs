@@ -7,11 +7,14 @@ namespace Entities
     {
         public Benutzer()
         {
-            Erstellt_CodeContent = new HashSet<CodeContent>();
-            Geaenderte_CodeContent = new HashSet<CodeContent>();
+            Erstellt_CodeSnippets = new HashSet<CodeSnippet>();
+            Geaenderte_CodeSnippets = new HashSet<CodeSnippet>();
 
-            Erstellt_Bemerkung = new HashSet<Bemerkung>();
-            Geaenderte_Bemerkung = new HashSet<Bemerkung>();
+            Erstellt_CodeContents = new HashSet<CodeContent>();
+            Geaenderte_CodeContents = new HashSet<CodeContent>();
+
+            Erstellt_Bemerkungen = new HashSet<Bemerkung>();
+            Geaenderte_Bemerkungen = new HashSet<Bemerkung>();
         }
 
         [NotMapped]
@@ -23,10 +26,13 @@ namespace Entities
         public string Password { get; set; }
         public string Role { get; set; }
 
-        public ICollection<CodeContent> Erstellt_CodeContent { get; set; }
-        public ICollection<CodeContent> Geaenderte_CodeContent { get; set; }
+        public ICollection<CodeSnippet> Erstellt_CodeSnippets { get; set; }
+        public ICollection<CodeSnippet> Geaenderte_CodeSnippets { get; set; }
 
-        public ICollection<Bemerkung> Erstellt_Bemerkung { get; set; }
-        public ICollection<Bemerkung> Geaenderte_Bemerkung { get; set; }
+        public ICollection<CodeContent> Erstellt_CodeContents { get; set; }
+        public ICollection<CodeContent> Geaenderte_CodeContents { get; set; }
+
+        public ICollection<Bemerkung> Erstellt_Bemerkungen { get; set; }
+        public ICollection<Bemerkung> Geaenderte_Bemerkungen { get; set; }
     }
 }

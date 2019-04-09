@@ -1,0 +1,51 @@
+@import "../../variables.base.scss";
+
+:host {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  /*overflow: auto;*/
+}
+
+.isHidden {
+  width: 0%;
+  height: 0%;
+  opacity: 0;
+}
+
+.isAcive {
+  background-color: rgba(75, 135, 78, 0.5);
+}
+
+.tab-nav-content {
+  flex-wrap: wrap;
+  display: flex;
+  flex-basis: 2rem;
+  flex-direction: row;
+  /*justify-content: space-between;*/
+  align-items: stretch;
+  background-color: $nav-bg-up;
+  border-bottom: 2px solid $base-border-color;
+}
+
+.tab-nav-content-item {
+  display: inline-flex;
+  padding: 0.5rem 3rem 0.5rem 3rem;
+  flex: 1;
+  justify-content: center;
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  transition: all 0.5s;
+}
+
+.tab-nav-content-item:hover {
+  background-color: rgba(75, 135, 78, 0.5);
+  color: white;
+}
+
+.tab-content {
+  flex: 1;
+  overflow: hidden;
+}

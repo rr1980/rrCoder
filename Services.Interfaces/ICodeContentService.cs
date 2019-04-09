@@ -7,7 +7,7 @@ namespace Services.Interfaces
 {
     public interface ICodeContentService
     {
-        Task<List<CodeContentVievmodel>> GetAllCodeContent();
+        Task<List<CodeSnippetVievmodel>> GetAllCodeSnippets();
         Task Add();
 
     }

@@ -9,11 +9,11 @@ namespace Web.Controllers
     [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    public class CodeContentController : ControllerBase
+    public class CodeSnippetController : ControllerBase
     {
         private readonly ICodeContentService _codeContentService;
 
-        public CodeContentController(ICodeContentService codeContentService)
+        public CodeSnippetController(ICodeContentService codeContentService)
         {
             _codeContentService = codeContentService;
         }
@@ -21,8 +21,8 @@ namespace Web.Controllers
         [HttpPost("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            throw new System.Exception("NA NÖÖÖ!");
-            var values = await _codeContentService.GetAllCodeContent();
+            //throw new System.Exception("NA NÖÖÖ!");
+            var values = await _codeContentService.GetAllCodeSnippets();
             return Ok(values);
         }
 

@@ -30,6 +30,8 @@ namespace DB.Migrations
 
                     b.Property<int?>("CodeContentId");
 
+                    b.Property<int?>("CodeSnippetId");
+
                     b.Property<DateTime>("Erstellt_Datum");
 
                     b.Property<int?>("Erstellt_UserId");
@@ -43,6 +45,8 @@ namespace DB.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CodeContentId");
+
+                    b.HasIndex("CodeSnippetId");
 
                     b.HasIndex("Erstellt_UserId");
 
@@ -78,7 +82,11 @@ namespace DB.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Betreff");
+                    b.Property<string>("Beschreibung");
+
+                    b.Property<int?>("CodeSnippetId");
+
+                    b.Property<string>("Content");
 
                     b.Property<DateTime>("Erstellt_Datum");
 
@@ -88,9 +96,11 @@ namespace DB.Migrations
 
                     b.Property<int?>("Geaendert_UserId");
 
-                    b.Property<string>("Text");
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CodeSnippetId");
 
                     b.HasIndex("Erstellt_UserId");
 
@@ -99,29 +109,75 @@ namespace DB.Migrations
                     b.ToTable("CodeContent");
                 });
 
+            modelBuilder.Entity("Entities.CodeSnippet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Beschreibung");
+
+                    b.Property<DateTime>("Erstellt_Datum");
+
+                    b.Property<int?>("Erstellt_UserId");
+
+                    b.Property<DateTime?>("Geaendert_Datum");
+
+                    b.Property<int?>("Geaendert_UserId");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Erstellt_UserId");
+
+                    b.HasIndex("Geaendert_UserId");
+
+                    b.ToTable("CodeSnippet");
+                });
+
             modelBuilder.Entity("Entities.Bemerkung", b =>
                 {
                     b.HasOne("Entities.CodeContent", "CodeContent")
                         .WithMany("Bemerkungen")
                         .HasForeignKey("CodeContentId");
 
+                    b.HasOne("Entities.CodeSnippet", "CodeSnippet")
+                        .WithMany("Bemerkungen")
+                        .HasForeignKey("CodeSnippetId");
+
                     b.HasOne("Entities.Benutzer", "Erstellt_User")
-                        .WithMany("Erstellt_Bemerkung")
+                        .WithMany("Erstellt_Bemerkungen")
                         .HasForeignKey("Erstellt_UserId");
 
                     b.HasOne("Entities.Benutzer", "Geaendert_User")
-                        .WithMany("Geaenderte_Bemerkung")
+                        .WithMany("Geaenderte_Bemerkungen")
                         .HasForeignKey("Geaendert_UserId");
                 });
 
             modelBuilder.Entity("Entities.CodeContent", b =>
                 {
+                    b.HasOne("Entities.CodeSnippet", "CodeSnippet")
+                        .WithMany("CodeContents")
+                        .HasForeignKey("CodeSnippetId");
+
                     b.HasOne("Entities.Benutzer", "Erstellt_User")
-                        .WithMany("Erstellt_CodeContent")
+                        .WithMany("Erstellt_CodeContents")
                         .HasForeignKey("Erstellt_UserId");
 
                     b.HasOne("Entities.Benutzer", "Geaendert_User")
-                        .WithMany("Geaenderte_CodeContent")
+                        .WithMany("Geaenderte_CodeContents")
+                        .HasForeignKey("Geaendert_UserId");
+                });
+
+            modelBuilder.Entity("Entities.CodeSnippet", b =>
+                {
+                    b.HasOne("Entities.Benutzer", "Erstellt_User")
+                        .WithMany("Erstellt_CodeSnippets")
+                        .HasForeignKey("Erstellt_UserId");
+
+                    b.HasOne("Entities.Benutzer", "Geaendert_User")
+                        .WithMany("Geaenderte_CodeSnippets")
                         .HasForeignKey("Geaendert_UserId");
                 });
 #pragma warning restore 612, 618

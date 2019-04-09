@@ -14,6 +14,7 @@ namespace DB
 
         public DbSet<Benutzer> Benutzer { get; set; }
         public DbSet<Bemerkung> Bemerkungen { get; set; }
+        public DbSet<CodeSnippet> CodeSnippets { get; set; }
         public DbSet<CodeContent> CodeContents { get; set; }
 
         public RRCoderDBContext(DbContextOptions<RRCoderDBContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
@@ -26,15 +27,26 @@ namespace DB
 
             modelBuilder.HasDefaultSchema(schema: "rrCoder");
 
+            modelBuilder.Entity<CodeSnippet>(entity =>
+            {
+                entity.ToTable("CodeSnippet");
+
+                entity.HasOne(d => d.Erstellt_User)
+                    .WithMany(p => p.Erstellt_CodeSnippets);
+
+                entity.HasOne(c => c.Geaendert_User)
+                    .WithMany(b => b.Geaenderte_CodeSnippets);
+            });
+
             modelBuilder.Entity<CodeContent>(entity =>
             {
                 entity.ToTable("CodeContent");
 
                 entity.HasOne(d => d.Erstellt_User)
-                    .WithMany(p => p.Erstellt_CodeContent);
+                    .WithMany(p => p.Erstellt_CodeContents);
 
                 entity.HasOne(c => c.Geaendert_User)
-                    .WithMany(b => b.Geaenderte_CodeContent);
+                    .WithMany(b => b.Geaenderte_CodeContents);
             });
 
             modelBuilder.Entity<Bemerkung>(entity =>
@@ -42,10 +54,16 @@ namespace DB
                 entity.ToTable("Bemerkung");
 
                 entity.HasOne(d => d.Erstellt_User)
-                    .WithMany(p => p.Erstellt_Bemerkung);
+                    .WithMany(p => p.Erstellt_Bemerkungen);
 
                 entity.HasOne(c => c.Geaendert_User)
-                    .WithMany(b => b.Geaenderte_Bemerkung);
+                    .WithMany(b => b.Geaenderte_Bemerkungen);
+
+                entity.HasOne(d => d.CodeSnippet)
+                    .WithMany(p => p.Bemerkungen);
+
+                entity.HasOne(d => d.CodeContent)
+                    .WithMany(p => p.Bemerkungen);
             });
 
             modelBuilder.Entity<Benutzer>(entity =>
@@ -86,11 +104,18 @@ namespace DB
 
                 if (entry.State == EntityState.Added)
                 {
-                    entity.Erstellt_User = user;
-                    entity.Erstellt_Datum = DateTime.UtcNow;
+                    if (user != null)
+                    {
+                        entity.Erstellt_User = user;
+                        entity.Erstellt_Datum = DateTime.UtcNow;
+                    }
                 }
 
-                entity.Geaendert_User = user;
+                if (user != null)
+                {
+                    entity.Geaendert_User = user;
+                }
+
                 entity.Geaendert_Datum = DateTime.UtcNow;
             }
         }

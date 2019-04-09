@@ -9,13 +9,19 @@ import 'prismjs/components/prism-typescript';
 //import 'prismjs/components/prism-scss';
 //import 'prismjs/components/prism-markup';
 
+import { TabModule } from '../tab/tab.module';
+import { CodeViewerSucheComponent } from './code-viewer-suche/code-viewer-suche.component';
+import { CodeViewerContentComponent } from './code-viewer-content/code-viewer-content.component';
+
+
 @NgModule({
   imports: [
     CommonModule,
     PrismModule,
-
+    TabModule
   ],
-  declarations: [CodeViewerComponent],
+  declarations: [CodeViewerComponent, CodeViewerSucheComponent, CodeViewerContentComponent],
+  entryComponents: [CodeViewerSucheComponent, CodeViewerContentComponent],
   exports: [CodeViewerComponent]
 })
 export class CodeViewerModule { }

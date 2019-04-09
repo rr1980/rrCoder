@@ -30,7 +30,15 @@ namespace Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddAutoMapper();
+
+
+            services.AddAutoMapper((c) =>
+            {
+                c.AddProfile(new MapperProfile());
+            }
+            , typeof(Startup).GetType().Assembly);
+
+
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(options =>

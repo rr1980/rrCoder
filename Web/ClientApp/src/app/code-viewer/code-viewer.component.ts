@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { slideInOutAnimation, fadeInAnimation } from '../helper/route-animation';
+import { AdItem } from '../tab/ad-item';
+import { CodeViewerSucheComponent } from './code-viewer-suche/code-viewer-suche.component';
+import { CodeViewerContentComponent } from './code-viewer-content/code-viewer-content.component';
+import { TabComponent } from '../tab/tab.component';
 
 @Component({
   selector: 'app-code-viewer',
@@ -8,10 +12,50 @@ import { slideInOutAnimation, fadeInAnimation } from '../helper/route-animation'
   animations: [fadeInAnimation],
   host: { '[@fadeInAnimation]': '' }
 })
-export class CodeViewerComponent implements OnInit {
+export class CodeViewerComponent implements OnInit, AfterViewInit {
 
-  language = 'html';
-  code = `import { Component, OnInit } from '@angular/core';
+  @ViewChild(TabComponent) tab: TabComponent;
+
+  ads: AdItem[];
+
+  constructor() {
+    this.onEvent = this.onEvent.bind(this);
+    //this.ads = [
+    //  new AdItem(CodeViewerSucheComponent, "Suche", this.onEvent, { name: 'Suche' }),
+    //];
+  }
+
+  counter: number = 0;
+
+  onEvent(event) {
+    console.debug("event", event);
+    this.counter++;
+    this.tab.add(new AdItem(CodeViewerContentComponent, this.counter.toString(), null, { content: this.counter.toString() }));
+
+    //this.ads.push(new AdItem(CodeViewerContentComponent, event, this.onEvent, { name: event }));
+
+    //var tmp = [
+    //  new AdItem(CodeViewerSucheComponent, "Suche", this.onEvent, { name: 'Suche' }),
+    //];
+    //tmp.push();
+
+    //this.ads = tmp;
+  }
+
+  ngOnInit() {
+  }
+
+  ngAfterViewInit(): void {
+    this.tab.add(new AdItem(CodeViewerSucheComponent, "Suche", this.onEvent, { name: 'Suche' }));
+
+  }
+}
+
+
+
+
+var language = 'html';
+var code = `import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
@@ -68,10 +112,3 @@ export class HomeComponent implements OnInit {
   }
 }
 `;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}

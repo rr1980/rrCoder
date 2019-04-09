@@ -38,9 +38,9 @@ export class AdminComponent implements OnInit {
 
 
   onClickGetAllCodeContent() {
-    this.ajax_post<any>("/api/CodeContent/GetAll", null).subscribe((response) => {
+    this.ajax_post<any>("/api/CodeSnippet/GetAll", null).subscribe((response) => {
 
-      console.debug({ "Test": response });
+      console.debug(response);
 
     });
   }

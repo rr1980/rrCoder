@@ -2,6 +2,21 @@
 
 namespace Entities
 {
+    public class CodeSnippet : ModifiablEntity
+    {
+        public CodeSnippet()
+        {
+            Bemerkungen = new HashSet<Bemerkung>();
+            CodeContents = new HashSet<CodeContent>();
+        }
+
+        public string Name { get; set; }
+        public string Beschreibung { get; set; }
+
+        public ICollection<Bemerkung> Bemerkungen { get; set; }
+        public ICollection<CodeContent> CodeContents { get; set; }
+    }
+
     public class CodeContent : ModifiablEntity
     {
         public CodeContent()
@@ -9,9 +24,11 @@ namespace Entities
             Bemerkungen = new HashSet<Bemerkung>();
         }
 
-        public string Betreff { get; set; }
-        public string Text { get; set; }
+        public string Name { get; set; }
+        public string Beschreibung { get; set; }
+        public string Content { get; set; }
 
+        public CodeSnippet CodeSnippet { get; set; }
         public ICollection<Bemerkung> Bemerkungen { get; set; }
     }
 }

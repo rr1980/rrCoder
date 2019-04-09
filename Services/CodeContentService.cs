@@ -30,16 +30,42 @@ namespace Services
 
             await _repository.Create(new CodeContent
             {
-                Betreff = DateTime.Now.ToString(),
-                Text = "Test",
+                Name = DateTime.Now.ToString(),
+                Beschreibung = "abc",
+                Content = "Test",
             });
         }
 
-        public async Task<List<CodeContentVievmodel>> GetAllCodeContent()
+        public async Task<List<CodeSnippetVievmodel>> GetAllCodeSnippets()
         {
-            var results = await _repository.GetAll<CodeContent>().ToListAsync();
+            var results = await _repository.GetAll<CodeSnippet>()
 
-            return _mapper.Map<List<CodeContentVievmodel>>(results);
+                .Include(x => x.Erstellt_User)
+                .Include(x => x.Geaendert_User)
+
+                .Include(x => x.Bemerkungen)
+                .ThenInclude(x => x.Erstellt_User)
+
+                .Include(x => x.Bemerkungen)
+                .ThenInclude(x => x.Geaendert_User)
+
+                .Include(x => x.CodeContents)
+                .ThenInclude(x => x.Erstellt_User)
+
+                .Include(x => x.CodeContents)
+                .ThenInclude(x => x.Geaendert_User)
+
+                .Include(x => x.CodeContents)
+                .ThenInclude(x => x.Bemerkungen)
+                .ThenInclude(x => x.Erstellt_User)
+
+                .Include(x => x.CodeContents)
+                .ThenInclude(x => x.Bemerkungen)
+                .ThenInclude(x => x.Geaendert_User)
+
+                .ToListAsync();
+
+            return _mapper.Map<List<CodeSnippetVievmodel>>(results);
         }
     }
 }

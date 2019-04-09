@@ -9,6 +9,7 @@
         public string Betreff { get; set; }
         public string Text { get; set; }
 
+        public CodeSnippet CodeSnippet { get; set; }
         public CodeContent CodeContent { get; set; }
     }
 }
