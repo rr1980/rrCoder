@@ -9,6 +9,6 @@ namespace Services.Interfaces
     {
         Task<List<CodeSnippetVievmodel>> GetAllCodeSnippets();
         Task Add();
-        Task<IEnumerable<CodeSnippetVievmodel>> Search(CodeViewerSearchRequest request);
+        Task<IEnumerable<CodeSnippetSearchResponseVievmodel>> Search(CodeViewerSearchRequest request);
     }
 }

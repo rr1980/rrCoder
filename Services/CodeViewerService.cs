@@ -26,7 +26,7 @@ namespace Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<CodeSnippetVievmodel>> Search(CodeViewerSearchRequest request)
+        public async Task<IEnumerable<CodeSnippetSearchResponseVievmodel>> Search(CodeViewerSearchRequest request)
         {
             var searchValues = request.SearchValue.Split(' ').Select(x => x.ToLower().Trim());
 
@@ -79,7 +79,7 @@ namespace Services
             }
 
 
-            return _mapper.Map<List<CodeSnippetVievmodel>>(preresults.SelectMany(x => x));
+            return _mapper.Map<List<CodeSnippetSearchResponseVievmodel>>(preresults.SelectMany(x => x));
         }
 
 

@@ -1,6 +1,8 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { AdComponent } from '../../tab/ad.component';
 import { AjaxService } from '../../helper/ajax.service';
+import { fromEvent, Subscription } from 'rxjs';
+import { map, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 interface ICodeViewerSearchResponse {
   request: string;
@@ -14,29 +16,47 @@ interface ICodeViewerSearchResponse {
 })
 export class CodeViewerSucheComponent implements AdComponent, OnInit, OnDestroy {
 
+  @ViewChild('searchInputElem') searchInputElem: ElementRef;
 
   @Input() context: any;
   @Input() onEvent: (event: any) => void;
 
+  searchSub: Subscription;
+
   result: any;
 
-  searchValue: string = "Test";
+  //searchValue: string = "Test";
 
   constructor(private ajaxService: AjaxService) { }
 
   ngOnInit() {
     console.debug("Suche init");
+
+    this.searchSub =  fromEvent(this.searchInputElem.nativeElement, 'keyup').pipe(
+      map((evt: any) => evt.target.value),
+      debounceTime(1000),
+      distinctUntilChanged()
+    ).subscribe((text: string) => this.search(text));
+
   }
 
   ngOnDestroy(): void {
     console.debug("Suche destroy");
+
+    if (this.searchSub) {
+      this.searchSub.unsubscribe();
+    }
   }
 
-  onClickSuche() {
-    this.ajaxService.post<ICodeViewerSearchResponse>("CodeViewer/Search", { searchValue: this.searchValue}).subscribe(res => {
+  search(text) {
+    this.ajaxService.post<ICodeViewerSearchResponse>("CodeViewer/Search", { searchValue: text }).subscribe(res => {
       console.debug("res", res);
       this.result = res.result;
     });
+  }
+
+  onClickSuche() {
+    this.search(this.searchInputElem.nativeElement.value);
   }
 
   //onClickTest() {

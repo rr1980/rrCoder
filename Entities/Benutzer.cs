@@ -17,6 +17,11 @@ namespace Entities
             Geaenderte_Bemerkungen = new HashSet<Bemerkung>();
         }
 
+        public override string ToString()
+        {
+            return Name?.Trim() + (string.IsNullOrEmpty(Vorname?.Trim()) ? "" : ", " + Vorname.Trim());
+        }
+
         [NotMapped]
         public string Token { get; set; }
 
