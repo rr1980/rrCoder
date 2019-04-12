@@ -8,7 +8,7 @@ import { AdComponent } from '../../tab/ad.component';
 })
 export class CodeViewerContentComponent implements AdComponent, OnInit, OnDestroy {
 
-  @Input() data: any;
+  @Input() context: any;
   @Input() onEvent: (event: any) => void;
 
   constructor() { }

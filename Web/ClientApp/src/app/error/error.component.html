@@ -1,18 +1,18 @@
 
 <app-modal id="error-modal">
-  <div *ngIf="error">
+  <!--<div *ngIf="error">-->
     <div class="modal-header">
-      <h1>{{error.name}}</h1>
+      <h1>{{error?.name}}</h1>
     </div>
     <div class="modal-body">
       <div *ngIf="error">
-        <h3>{{error.msg}}</h3>
+        <h3>{{error?.msg}}</h3>
         <br />
-        <pre>{{error.stack}}</pre>
+        <pre>{{error?.stack}}</pre>
       </div>
     </div>
     <div class="modal-footer">
       <button (click)="closeModal();">Close</button>
     </div>
-  </div>
+  <!--</div>-->
 </app-modal>

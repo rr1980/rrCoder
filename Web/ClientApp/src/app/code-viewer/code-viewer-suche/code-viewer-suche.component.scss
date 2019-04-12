@@ -1,0 +1,44 @@
+
+@import "../../../variables.base.scss";
+
+:host {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  border: 2px solid $base-border-color;
+}
+
+
+.cv-suche-input {
+  display: flex;
+  flex-basis: 3rem;
+  flex-direction: row;
+  padding: 0.5rem;
+  background-color: $nav-bg-side;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.cv-suche-input-content {
+  display: flex;
+  flex-grow: 1;
+  align-items: stretch;
+}
+
+.cv-suche-input-command {
+  display: flex;
+  flex-shrink: 1;
+  flex-basis: 3vw;
+}
+
+.cv-suche-content {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  padding: 0.5rem;
+  overflow: auto;
+}
+
+

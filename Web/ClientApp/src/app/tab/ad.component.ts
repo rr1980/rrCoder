@@ -1,4 +1,4 @@
 export interface AdComponent {
-  data: any;
+  context: any;
   onEvent: (event) => void;
 }

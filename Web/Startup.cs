@@ -61,7 +61,12 @@ namespace Web
 
             var connection = @"Server=(localdb)\mssqllocaldb;Database=rrCoderDb;Trusted_Connection=True;MultipleActiveResultSets=true";
             services.AddDbContext<RRCoderDBContext>
-                (options => options.UseSqlServer(connection));
+                (
+                    options =>
+                    {
+                        options.UseSqlServer(connection);
+                        options.EnableSensitiveDataLogging();
+                    });
 
             //(options => options.UseSqlServer(connection, builder => builder.MigrationsAssembly()));
 
@@ -94,7 +99,7 @@ namespace Web
             services.AddHttpContextAccessor();
             services.AddScoped<IRepository, Repository>();
             services.AddScoped<IBenutzerService, BenutzerService>();
-            services.AddScoped<ICodeContentService, CodeContentService>();
+            services.AddScoped<ICodeViewerService, CodeViewerService>();
 
 
             services.AddSpaStaticFiles(configuration =>

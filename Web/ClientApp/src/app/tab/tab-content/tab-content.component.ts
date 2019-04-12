@@ -18,7 +18,7 @@ export class TabContentComponent implements OnInit, OnChanges {
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.ad.component);
     this.viewContainerRef.clear();
     let componentRef = this.viewContainerRef.createComponent(componentFactory);
-    (<AdComponent>componentRef.instance).data = this.ad.data;
+    (<AdComponent>componentRef.instance).context = this.ad.data;
     (<AdComponent>componentRef.instance).onEvent = this.ad.onEvent;
 
     this.renderer.appendChild(

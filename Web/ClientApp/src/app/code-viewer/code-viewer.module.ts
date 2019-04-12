@@ -12,11 +12,13 @@ import 'prismjs/components/prism-typescript';
 import { TabModule } from '../tab/tab.module';
 import { CodeViewerSucheComponent } from './code-viewer-suche/code-viewer-suche.component';
 import { CodeViewerContentComponent } from './code-viewer-content/code-viewer-content.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     PrismModule,
     TabModule
   ],

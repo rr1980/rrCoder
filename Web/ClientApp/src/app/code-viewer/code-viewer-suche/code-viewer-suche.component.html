@@ -1,4 +1,7 @@
-<p>
-  code-viewer-suche works!
-</p>
-<button (click)="onClickTest()">Test</button>
+<div class="cv-suche-input">
+    <input [(ngModel)]="searchValue" class="cv-suche-input-content" placeholder="Suche..." />
+    <button class="cv-suche-input-command" (click)="onClickSuche()">Suche</button>
+</div>
+<div class="cv-suche-content">
+  <!--<button (click)="onClickTest()">Test</button>-->
+</div>
